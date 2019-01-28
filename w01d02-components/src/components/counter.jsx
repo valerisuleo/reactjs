@@ -59,6 +59,8 @@ class Counter extends Component {
     console.log('Ohhh you click me!', this);
   }
 
+
+
   getBadgeClasses() {
     let classes = 'badge m-2 ';
     classes += (this.state.count === 0) ? 'badge-warning' : 'badge-primary';
