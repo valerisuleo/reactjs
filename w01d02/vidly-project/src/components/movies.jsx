@@ -33,8 +33,8 @@ class Movies extends Component {
                     <td>{item.genre.name}</td>
                     <td>{item.numberInStock}</td>
                     <td>{item.dailyRentalRate}</td>
-                    <td><button className="btn btn-danger btn-sm"
-                      onClick={() => this.deleteMovie(item)}>Button</button>
+                    <td>
+                      <button className="btn btn-danger btn-sm" onClick={() => this.deleteMovie(item)}>Button</button>
                   </td>
                 </tr>
               )}

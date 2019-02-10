@@ -492,7 +492,7 @@ So what we need is:
 ```
 handleIncrement = () => {
     console.log('Ohhh you click me!', this);
-    this.state({ count: this.state.count + 1});
+    this.setState({ count: this.state.count + 1 });
   }
 ```
 
@@ -513,7 +513,8 @@ We modify our event handler like this:
 ```
   handleIncrement = product => {
     console.log(product);
-    this.state({ count: this.state.count + 1});
+        this.setState({ count: this.state.count + 1 });
+
   }
 ```
 
