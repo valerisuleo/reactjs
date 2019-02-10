@@ -10,23 +10,34 @@
 	import 'bootstrap/dist/css/bootstrap.css';
 	import 'font-awesome/css/font-awesome.css';
 	```
-4. Back to `src/App.js`
+##### Make a Movies Component
+
+1. `mkdir components && touch components/movies.jsx`
+2. Back to `src/components/movies.jsx`:
 
 	```
 	import React, { Component } from 'react';
-	import './App.css';
 	
-	class App extends Component {
+	class Movies extends Component {
 	  render() {
-	    return (
 	      <main className="container">
-	        
-	      </main>
-	    );
+
+      </main>
 	  }
 	}
 	
-	export default App;
+	export default Movies;
 	```
+3. Back to `/index.js` here we need to import our component `import Movies from './components/movies';`
+4. we pass the component as argument instead of the `<App />` like this: `ReactDOM.render(<Movies />, document.getElementById('root'));`
+5. Back in the browser let's check the result!
 
-5. Let's add some fake data: `src/services/...`
+##### Import Fake Data form Service
+
+```
+state = {
+    movies: getMovies()
+  }
+```
+
+##### Import
