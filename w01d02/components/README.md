@@ -174,6 +174,7 @@ So far so good...however if we wanna add some custom css in *jsx* we have 2 opti
 	```
 
 	also we need to create our `styles ` obj:
+	
 
 	```
 	class Counter extends Component {
@@ -198,6 +199,7 @@ So far so good...however if we wanna add some custom css in *jsx* we have 2 opti
 	  }
 	}
 	```
+	
 
 2. We can add style directly in line:
 
@@ -468,6 +470,53 @@ We have to hookup our method with the new instance that we just created:
 ```
 
 We can simply use an `=>` and we don't need the `constructor` anymore! :)
+
+
+## Updating The State
+
+Now wa want to update the `count` property when we click here:
+
+```
+handleIncrement = () => {
+    console.log('Ohhh you click me!', this);
+    this.state.count++
+  }
+```
+
+>It's not working. Why?
+
+If we take a look at the terminal we see a complitation error: _Line 60:  Do not mutate state directly. Use **setState()**_
+
+So what we need is:
+
+```
+handleIncrement = () => {
+    console.log('Ohhh you click me!', this);
+    this.state({ count: this.state.count + 1});
+  }
+```
+
+## Passing Events Arguments
+
+Whenever you need to pass an arg to event handlers simply pass an `=>` here:
+
+```
+Before:
+<button onClick={this.handleIncrement} className="btn btn-secondary btn-sm">Increment Btn</button>
+
+After:
+<button onClick={() => this.handleIncrement(product)} className="btn btn-secondary btn-sm">Increment Btn</button>
+```
+
+We modify our event handler like this:
+
+```
+  handleIncrement = product => {
+    console.log(product);
+    this.state({ count: this.state.count + 1});
+  }
+```
+
 
 
 
