@@ -1,90 +1,91 @@
-import React, { Component } from 'react';
-import { getMovies } from '../services/fakeMovieService';
+import React, { Component } from "react";
+import { getMovies } from "../services/fakeMovieService";
 
-
-class Movies extends Component {
-
+class MoviesComponent extends Component {
   state = {
     movies: getMovies(),
-    message: ''
-  }
+    message: ""
+  };
+
+  container = {
+    width: "90vw",
+    height: "90vh",
+    margin: "auto",
+    marginTop: "50px",
+    position: "relative"
+  };
+
+  centered = {
+    position: "absolute",
+    top: "50%",
+    left: "50%",
+    transform: "translate(-50%, -50%)"
+  };
 
   render() {
     return (
-      <main className="container">
-        <div style={ this.rowStyle } className="row">
-          <div className="col-lg-2"></div>
-          <div className="col-lg-8">
-            <span>{ this.state.message }</span>
-            <table className="table">
-              <thead>
-                <tr>
-                  <th scope="col">Title</th>
-                  <th scope="col">Genre</th>
-                  <th scope="col">NumberInStock</th>
-                  <th scope="col">DailyRentalRate</th>
-                  <th scope="col">Delete</th>
-                </tr>
-              </thead>
-              <tbody>
-                {this.getAll().map(item =>
-                  <tr key={item._id}>
-                    <th scope="row">{item.title}</th>
-                    <td>{item.genre.name}</td>
-                    <td>{item.numberInStock}</td>
-                    <td>{item.dailyRentalRate}</td>
-                    <td>
-                      <button className="btn btn-danger btn-sm" onClick={() => this.deleteMovie(item)}>Button</button>
+      <main style={this.container}>
+        {!this.state.movies.length ? (
+          <h5 style={this.centered}>
+            There Are no movies left in the database!
+          </h5>
+        ) : (
+          <table className="table" style={this.centered}>
+            <thead>
+              <tr>
+                <th scope="col">Title</th>
+                <th scope="col">Genre</th>
+                <th scope="col">NumberInStock</th>
+                <th scope="col">DailyRentalRate</th>
+                <th>Delete</th>
+              </tr>
+            </thead>
+            <tbody>
+              {this.getAll().map(item => (
+                <tr key={item._id}>
+                  <th scope="row">{item.title}</th>
+                  <td>{item.genre.name}</td>
+                  <td>{item.numberInStock}</td>
+                  <td>{item.dailyRentalRate}</td>
+                  <td>
+                    <button
+                      onClick={() => this.movieDelete(item)}
+                      className="btn btn-danger btn-sm"
+                    >
+                      Delete
+                    </button>
                   </td>
                 </tr>
-              )}
+              ))}
             </tbody>
           </table>
-        </div>
-        <div className="col-lg-2"></div>
-      </div>
+        )}
       </main>
-      )
-    }
-
-
-  // render() {
-  //   return (
-  //     <div>
-  //       <ul>
-  //         {this.getAll().map(item =>
-  //           <li key={item._id}>{item.title}
-  //             <button onClick={() => this.deleteMovie(item)}>Button</button>
-  //           </li>)}
-  //         </ul>
-  //       </div>
-  //     )
-  //   }
-
-
-    rowStyle =  {
-      marginTop: '5em'
-    }
-
-    getAll() {
-      const films = this.state.movies;
-      return films;
-    }
-
-    deleteMovie = (item) => {
-      const films = this.state.movies;
-      var index = films.indexOf(item);
-      films.splice(index, 1);
-      // Here we update the view
-      this.setState({ movies: films });
-
-      if (films.length === 0) {
-        const table = document.getElementsByClassName('table')[0];
-        table.style.display = 'none';
-        this.setState({ message: 'No movies left, bitch!' })
-      }
-    }
-
+    );
   }
 
-export default Movies;
+  getAll = () => {
+    const { movies } = this.state;
+    return movies;
+  };
+
+  movieDelete = current => {
+    const { movies } = this.state;
+
+    let movieIndex = movies.indexOf(current);
+    movies.splice(movieIndex, 1);
+    // Here we update the view
+    this.setState(movies);
+  };
+
+  // Alternative synthax:
+  //   movieDelete = current => {
+  //     const films = this.state.movies;
+  //     var index = films.indexOf(item);
+  //     films.splice(index, 1);
+  //     // Here we update the view
+  //     this.setState({ movies: films });
+  //   };
+}
+
+export default MoviesComponent;
