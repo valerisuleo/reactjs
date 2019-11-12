@@ -1,68 +1,175 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+# Composing Component
 
-## Available Scripts
+#### In this section:
 
-In the project directory, you can run:
+- Pass Data
+- Raise and Handle Events
+- Multiple Components in sync
+- Functional Components
+- Lifecycle Hooks
 
-### `yarn start`
+## Passing data to components
 
-Runs the app in the development mode.<br />
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+First we create another component `counters.jsx` an d in this comp. we wanna rendere a **list** of counters.
 
-The page will reload if you make edits.<br />
-You will also see any lint errors in the console.
+Back to `/index.js` instead of `<CounterComponent />` we wanna import `<CountersComponent />`
 
-### `yarn test`
+```
+import React, { Component } from 'react';
+import CounterComponent from './counter'
 
-Launches the test runner in the interactive watch mode.<br />
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+class CountersComponent extends Component {
+    state = {  }
 
-### `yarn build`
+    render() { 
+        return (
+            <div>
 
-Builds the app for production to the `build` folder.<br />
-It correctly bundles React in production mode and optimizes the build for the best performance.
+                <CounterComponent />
+                <CounterComponent />
+                <CounterComponent />
+                <CounterComponent />
 
-The build is minified and the filenames include the hashes.<br />
-Your app is ready to be deployed!
+            </div>
+        )
+    }
+}
+ 
+export default CountersComponent;
+```
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+Instead of hardcoding let's make an `array of counters`:
 
-### `yarn eject`
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+```
+  state = {
+    counters: [
+      { id: 1, value:0 },
+      { id: 2, value:0 },
+      { id: 3, value:0 },
+      { id: 4, value:0 },
+    ]
+  }
+```
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+Just like this:
 
-Instead, it will copy all the configuration files and the transitive dependencies (Webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+```
+state = {
+    counters: [
+      { id: 1, value: 0 },
+      { id: 2, value: 0 },
+      { id: 3, value: 0 },
+      { id: 4, value: 0 }
+    ]
+  };
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+  render() {
+    return (
+      <div>
+        {this.state.counters.map((item => <CounterComponent key={item.id}>{item.id}</CounterComponent>))}
+      </div>
+    );
+  }
+}
+```
 
-## Learn More
+> If we do `{ id: 1, value:7 },` it will still render `0`. **Why?**
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+Fist let's add the `value` attribute
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+```
+  render() {
+    return (
+      <div>
+        {this.state.counters.map(item => (
+          <CounterComponent value={item.value} key={item.id} selected={true}>{item.id}</CounterComponent>
+        ))}
+      </div>
+    );
+  }
+}
+```
 
-### Code Splitting
+Back to `/counter.jsx` we add temporary inside the render method 
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/code-splitting
+```
+  render() {
+      console.log('props', this.props);     
+```
 
-### Analyzing the Bundle Size
+> Every react comp. has a property called `props` _a basic javascript obj which includes all the attributes that we set_ in `CountersComponent
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size
+```
+{"value":0,"selected":true,"children":1}
+{"value":0,"selected":true,"children":2}
+{"value":0,"selected":true,"children":3}
+See?
+{"value":4,"selected":true,"children":4}
+```
 
-### Making a Progressive Web App
+Back to `/counter/jsx` instead of
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app
+```
+ state = {
+    count: 0,
+    message: "Click To Start to count"
+  };
+```
 
-### Advanced Configuration
+We are gonna do 
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/advanced-configuration
+```
+  state = {
+    count: this.props.value,
+    message: "Click To Start to count"
+  };
+```
 
-### Deployment
+Back to  chrome we can see le last item has `value = 4` 
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/deployment
+![Imgur](https://www.dropbox.com/s/ug9ha0vkqmepprb/a.png?raw=1)
 
-### `yarn build` fails to minify
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify
+## Passing Children
+
+We learned that the `attrs` we set in our `CountersComponent`
+
+```
+ <CounterComponent value={item.value} key={item.id} selected={true}>
+```
+
+can be passed to the `CounterComponent` using the `props` property.
+
+We have anothe property called **`children`** and _we use that when we want to pass something beetween the opening and closing tag of an elment_
+
+If we add a tag:
+
+```
+<div>
+	{this.state.counters.map(item => (
+	<CounterComponent value={item.value} key={item.id} selected={true}>
+		<h4>Hey I am children</h4>
+	</CounterComponent>
+	))}
+</div>
+```
+
+and we `log` again the `props` property:
+
+```
+value: 0, selected: true, children: {…}
+```
+
+To access to its children we simply do `{this.props.children}`
+
+and we can do it **dynamically** just like this:
+
+```
+<CounterComponent value={item.value} key={item.id} selected={true}>
+	<h4>#{item.id}</h4>
+</CounterComponent>
+```
+
+### Debugging React Apps
+
