@@ -5,7 +5,6 @@
 - Pass Data
 - Raise and Handle Events
 - Multiple Components in sync
-- Functional Components
 - Lifecycle Hooks
 
 
@@ -194,8 +193,6 @@ class Counter extends Component {
 
 <h1 style="color:dodgerblue">Raise and Handle Events</h1>
 
-## Raising and Handling Events
-
 _The component that **owns** a piece of the state, should be the one **modifying** it_.
 
 
@@ -380,7 +377,6 @@ export default Counter;
 
 <h1 style="color:dodgerblue">Multiple Components in Sync</h1>
 
-## Multiple Components in Sync
 
 Let's take out app to the next level and make it more complex:
 
@@ -426,33 +422,250 @@ We want to display the tolat amount of counters inside the `nav`.
 
 ## Lifting the State Up
 
+We should move the the `state` and all the methods related to the state from `Counters` to `App` component which will look like:
+
+```
+render() { 
+        return (
+            <React.Fragment>
+                <Navbar />
+                <main className="container">
+                    <Counters
+                        oneReset={this.handleeReset}
+                        onDelete={this.handleDelete}
+                        onIncrement={this.handleIncrement}>
+                    </Counters>
+                </main>
+            </React.Fragment>
+        );
+    }
+```
+
+
+Because we have not `state` anymore `Counters` we need to relay on the `props`, just like this:
+
+
+```
+class Counters extends Component {
+
+    render() {
+
+        return (
+            <div>
+                <button
+                    onClick={this.props.onReset}
+                    className="btn btn-primary m-2">Reset
+                </button>
+
+                {this.props.counters.map((item) => (
+                    <Counter
+                        key={item.id}
+                        onDelete={this.props.onDelete}
+                        onIncrement={this.props.onIncrement}
+                        counter={item}>
+                    </Counter>
+                ))}
+            </div>
+        );
+    }
+}
+```
+
+
+...hence the we need to update `App` one more time and pass `counters={this.state.counters}`:
+
+```
+class App extends Component {
+
+    state = {
+        counters: [
+            { id: 1, value: 4 },
+            { id: 2, value: 0 },
+            { id: 3, value: 0 },
+            { id: 4, value: 0 }
+        ]
+    };
+    
+    render() { 
+        return (
+            <React.Fragment>
+                <Navbar />
+                <main className="container">
+                    <Counters
+                        counters={this.state.counters}
+                        oneReset={this.handleeReset}
+                        onDelete={this.handleDelete}
+                        onIncrement={this.handleIncrement}>
+                    </Counters>
+                </main>
+            </React.Fragment>
+        );
+    }
+```
+
+Same story for `Navbar`:
+
+```
+return (
+    <React.Fragment>
+    
+        <Navbar totalCount={this.state.counters.length} />
+        
+        <main className="container">
+            <Counters
+                counters={this.state.counters}
+                onReset={this.handleReset}
+                onDelete={this.handleDelete}
+                onIncrement={this.handleIncrement}>
+            </Counters>
+        </main>
+    </React.Fragment>
+);
+```
+
+and then...
+
+```
+class Navbar extends Component {
+    render() { 
+        return (
+            <nav className="navbar navbar-light bg-light">
+                <a className="navbar-brand" href="#">
+                    Total Count: {this.props.totalCount}
+                </a>
+            </nav>
+        );
+    }
+}
+```
+
+<h1 style="color:dodgerblue">Lifecycle Hooks</h1>
+
+Our components go through few phases during their lifecycle:
+
+1. *Mounting phase* and this is when an instance of a component is created and inserted into the DOM.
+2. *Update phase* and this happens when the `state`, or the `props` of a component get changed.
+3. *Unmounting phase*, this happens when a component is removed from the DOM such as when we delete the counter.
+
+
+> **What are the lifecycle hooks?** 
+> Methods that allow us to hook into certain moments during the lifecycle of a component and do something. React will call this methods in the following order:
+
+![Imgur](https://www.dropbox.com/s/p1emztqnkz0bfaq/Lifecycle%20Hooks.png?raw=1)
+
+
+
+## Mounting phase
+
+**1. `constructor`**
+
+```
+class App extends Component {
+
+    state = {};
+    
+    constructor(props) {
+    	super(props);
+    	this.state = this.props.something;
+    }
+}
+```
+
+This constructor is called only once when an instance of a class is created. This is a great opportunity to initialise the propertie - i.e. `this.state`
+
+
+**2. `render`**
+
+
+```
+class App extends Component {
+
+    state = {};
+      
+    render() {}
+}
+```
 
 
 
 
+**3. `componentDidMount`**
+
+This methid is called **after** our component is rendered into the DOM and it's the perfect place to make *AJAX* calls to get data from the server.
+
+```
+class App extends Component {
+
+    state = {};
+  
+    constructor() {
+    	super();
+    }
+    
+    componentDidMount() {
+    	Ajax Call
+    	this.setState({ response });
+    }
+}
+```
+
+> **You cannot use lifecylcle hooks in stateless components!**
+
+
+## Updating phase
+
+**1. `render`**
+
+In this method we are updating the state `this.setState({ counters });` and this will schedule a call to the `render()`.
+
+
+```
+class App extends Component {
+
+   handleIncrement = (counter) => {
+        const counters = [...this.state.counters];
+        const index = counters.indexOf(counter);
+        counters[index] = { ...counter };
+        counters[index].value++;
+        this.setState({ counters });
+    };    
+    render() {}
+}
+```
 
 
 
+**2. `componentDidUpdate`**
+
+This method is called after a component is updated. Which means we have new state or new props, so we can compare this new state/props with the old one and if there's a change we can make a new *AJAX* req. to get data from the server.
 
 
+```
+class App extends Component {
+    
+        componentDidUpdate(prevProps, prevState) {
+        console.log('prevProps', prevProps);
+        console.log('prevState', prevState);
 
+        if (prevProps.counter.value !== this.props.counter.value) {
+            // Ajax Call
+        }
+    }
+ }
+```
 
+## Unmounting phase
 
+This method is called just before a component is removed from the DOM and this give us the opportunity to do any kind of clen up.
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+```
+class App extends Component {
+    
+    componentWillMount() {
+    
+    }   
+}
+```
 
 
 

@@ -3,33 +3,41 @@ import React, { Component } from 'react';
 class Counter extends Component {
 
     styles = {
-        fontSize: 25,
+        fontSize: 15,
         fontWeight: "bold"
     };
 
     render() {
         let classes = this.getBadgeClass();
-        // console.log(this.props);
+        // console.log('Counter Single', this.props);
 
         return (
-            <div style={{ display: "block" }}>
-                <span style={this.styles} className={classes}>
-                    {this.formatCount()}
-                </span>
+            <div className="row">
 
-                <button
-                    onClick={() => this.props.onIncrement(this.props.counter)}
-                    className="btn btn-secondary btn-sm"
-                >
-                    Increment
-                </button>
+                <div className="col-1">
+                    <span style={this.styles} className={classes}>
+                        {this.formatCount()}
+                    </span>
+                </div>
 
-                <button
-                    onClick={this.props.onDelete}
-                    className="btn btn-danger btn-sm ml-2"
-                >
-                    Delete
-                </button>
+                <div className="col">
+                    <button
+                        onClick={() => this.props.onIncrement(this.props.counter)}
+                        className="btn btn-secondary btn-sm">+
+                    </button>
+                    
+                    <button
+                        onClick={() => this.props.onDecrement(this.props.counter)}
+                        disabled={this.props.counter.value === 0 ? 'disabled' : ''}
+                        className="btn btn-secondary btn-sm m-2">-
+                    </button>
+
+                    <button
+                        onClick={this.props.onDelete}
+                        className="btn btn-danger btn-sm">Delete
+                    </button>
+                </div>
+
             </div>
         );
     }
