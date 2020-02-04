@@ -76,7 +76,7 @@ const pagesCount = itemsCount/pageSize;
 
 There are may ways, the simplest one is using **_Lodash_**:
 
-`npm i lodash --save`
+- `npm i lodash --save`
 
 ```
 import React from "react";
@@ -143,4 +143,100 @@ we want to add the `active` class to the pages btns.
 		))}
 	</ul>
 	```
+
+
+## Paginating Data
+
+It's time now to write the logic to paginate the data. This is the kinda of logic that we are gonna reuse somewhere else:
+
+1. `mkdir common && touch common/paginate.js`
+
+	```
+	export function paginate(items, pageNumber, pageSize) {
+	
+	}
+	```
+2. `import _ from 'lodash';`
+3. To paginate the data first we need to calculate the starting index of `items[]` on this page.
+
+	```
+	export function paginate(items, pageNumber, pageSize) {
+	 
+	    const indexStart = (pageNumber - 1) * pageSize;
+	
+	}
+	```
+4. Now we can use lodash to go to this start index and take all the items for the current page, this method will slice our `items[]` starting from  `indexStart`:
+
+
+	```
+	export function paginate(items, pageNumber, pageSize) {
+	    const indexStart = (pageNumber - 1) * pageSize;
+	    
+	    _.slice(items, indexStart);     
+	 }
+	```
+5. now we can pick item for this current page from this `array`
+
+	```
+	export function paginate(items, pageNumber, pageSize) {
+	    const indexStart = (pageNumber - 1) * pageSize;
+	    _.slice(items, indexStart);   
+	      
+	    _.take()
+	}
+	```
+	
+	We can do better: in order to **chain** the *lodash* methods we use a *wrapper obj* - `_(items)` - something like this:
+	
+	```
+	export function paginate(items, pageNumber, pageSize) {
+	    const indexStart = (pageNumber - 1) * pageSize;
+	    
+	    _(items).slice(indexStart).take(pageSize);
+	}
+	```
+
+6. Finally we need to convert this *wrapper obj* - `_(items)` - to a regular `[]`:
+
+	```
+	export function paginate(items, pageNumber, pageSize) {
+	    const indexStart = (pageNumber - 1) * pageSize;
+	    
+	    return _(items).slice(indexStart).take(pageSize).value();
+	}
+	```
+
+Back to `movies.jsx`:
+
+```
+import { paginate } from "../utilities/paginate";
+...
+render() {
+    const { pageSize, currentPage } = this.state;
+    
+    const movies = paginate(this.state.movies, currentPage, pageSize);
+    
+
+```
+
+
+let's update:
+
+- <s>`itemsCount={ movies.length }`</s>
+- `itemsCount={ this.state.movies.length }`  
+
+```
+<Pagination 
+    itemsCount={ this.state.movies.length } 
+    pageSize={ pageSize } 
+    currentPage={ currentPage } 
+    onPageChange={ this.handlePageChange }/> 
+```
+
+Now the pagination works!!!
+
+
+## Type Checking with PropTypes
+
 
