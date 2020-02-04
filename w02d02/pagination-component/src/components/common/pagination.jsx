@@ -4,10 +4,13 @@ import _ from "lodash";
 const Pagination = props => {
     const { itemsCount, pageSize, onPageChange, currentPage } = props;
 
+    console.log('itemsCount', itemsCount);
+    console.log('pageSize', pageSize);
     const pagesCount = Math.ceil(itemsCount / pageSize);
+    
     const pages = _.range(1, pagesCount + 1);
     // if we have only one page btn we don't wanto to display: bad ux!
-    if (pagesCount === 1) return null;
+    // if (pagesCount === 1) return null;
 
     return (
         <nav aria-label="Page navigation example">

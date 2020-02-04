@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { getMovies } from "../services/fakeMovieService";
 import Like from "./common/like";
 import Pagination from "./common/pagination";
+import { paginate } from "../utilities/paginate";
 
 class Movie extends Component {
     state = {
@@ -29,7 +30,10 @@ class Movie extends Component {
     }
 
     render() {
-        const { movies, pageSize, currentPage } = this.state;
+        const { pageSize, currentPage } = this.state;
+        const movies = paginate(this.state.movies, currentPage, pageSize);
+        console.log('movies', movies);
+        
 
         return (
             <main className="container">
@@ -80,7 +84,7 @@ class Movie extends Component {
                     </div>
                 )}
                 <Pagination 
-                itemsCount={ movies.length } 
+                itemsCount={ this.state.movies.length } 
                 pageSize={ pageSize } 
                 currentPage={ currentPage } 
                 onPageChange={ this.handlePageChange }/> 
