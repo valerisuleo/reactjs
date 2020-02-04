@@ -88,3 +88,59 @@ const Pagination = props => {
     
     const pages = _.range(1, pagesCount + 1);
 ```
+
+## Handling Page Changes
+
+we want to add the `active` class to the pages btns.
+
+1. The `Pagination` isnt't aware of which btn we are clicking because it's just passing the data. We need to make it aware so let's add a new attr. : `const { itemsCount, pageSize, onPageChange, currentPage } = props;`
+
+2. Back to `movies.jsx` let's add the same attr `currentPage={currentPage} `
+
+	```
+	<Pagination 
+	    itemsCount={movies.length} 
+	    pageSize={pageSize} 
+	    currentPage={currentPage} 
+	    onPageChange={this.handlePageChange}/> 
+	```
+	
+	Here we know exactly on what page we are thanks to:
+	
+	```
+	 handlePageChange = (page) => {
+	        console.log(page); 
+	    }
+	```
+	
+	So in order to pass the `currentPage` value back to `Pagination` we need to update our `state`:
+	
+	```
+	handlePageChange = (page) => {
+	        this.setState({ currentPage: page }); 
+	    }
+	```
+	
+	> Nothing happend! Why?
+	
+	**We need to set an initial value inside our `state` in order to update it!**
+	
+	```
+	class Movie extends Component {
+	    state = {
+	        movies: [],
+	        pageSize: 4,
+	        currentPage: 1
+	    };
+	```
+
+3. Finally back to `Pagination` we can use the *ternary operator* to add dynamically the `active` class:
+
+	```
+	<ul className="pagination">
+		{pages.map((page, i) => (
+		<li key={i} style={{ cursor: 'pointer' }} className={ page === currentPage ? "page-item active" : "page-item"}></li>
+		))}
+	</ul>
+	```
+
