@@ -6,7 +6,8 @@ import Pagination from "./common/pagination";
 class Movie extends Component {
     state = {
         movies: [],
-        pageSize: 10
+        pageSize: 4,
+        currentPage: 1
     };
 
     constructor() {
@@ -28,7 +29,7 @@ class Movie extends Component {
     }
 
     render() {
-        const { movies, pageSize } = this.state;
+        const { movies, pageSize, currentPage } = this.state;
 
         return (
             <main className="container">
@@ -78,14 +79,17 @@ class Movie extends Component {
                         </button>
                     </div>
                 )}
-                <Pagination itemsCount={movies.length} pageSize={pageSize} onPageChange={this.handlePageChange}/> 
+                <Pagination 
+                itemsCount={ movies.length } 
+                pageSize={ pageSize } 
+                currentPage={ currentPage } 
+                onPageChange={ this.handlePageChange }/> 
             </main>
         );
     }
 
-    handlePageChange = () => {
-        console.log('wowowow');
-        
+    handlePageChange = (page) => {
+        this.setState({ currentPage: page }); 
     }
 
     handleLike = (item) => {
