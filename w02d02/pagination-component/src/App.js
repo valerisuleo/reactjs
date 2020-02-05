@@ -11,7 +11,7 @@ library.add(fab, fasFaHeart, farFaHeart)
 class App extends Component {
   render() {
     return (
-      <main className="container">
+      <main className="container m-3">
         <Movies />
       </main>
     );

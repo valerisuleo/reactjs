@@ -2,7 +2,7 @@ import _ from 'lodash';
 
 // items: []; pageNumber: number; pageSize: number;
 export function paginate(items, pageNumber, pageSize) {
-    console.log('items', items);
+    // console.log('items', items);
     
     const indexStart = (pageNumber - 1) * pageSize;
     
