@@ -239,4 +239,21 @@ Now the pagination works!!!
 
 ## Type Checking with PropTypes
 
+Like in Angular also in React we have `types` in order to prevent future error and maintaining our code.
+
+- `npm i prop-types --save`
+
+```
+import PropTypes from 'prop-types';
+...
+Pagination.propTypes = {
+    itemsCount: PropTypes.number.isRequired,
+    pageSize: PropTypes.number.isRequired,
+    onPageChange: PropTypes.func.isRequired,
+    currentPage: PropTypes.number.isRequired
+}
+```
+
+
+
 
