@@ -10,20 +10,14 @@ class Movie extends Component {
     state = {
         movies: [],
         genres: [],
+        filtered: [],
         pageSize: 4,
         currentPage: 1
     };
 
-    // constructor() {
-    //     super();
-    //     console.log(this.state.movies);
-    //     this.state.movies = this.getInitialState();
-    // }
-
     componentDidMount() {
         this.setState({ movies: this.getInitialState(), genres: getGenres() });
     }
-    
 
     getInitialState() {
         const movies = getMovies();
@@ -38,29 +32,31 @@ class Movie extends Component {
     }
 
     render() {
-        const { pageSize, currentPage, genres } = this.state;
+
+        const { pageSize, currentPage, genres, selectedGenre } = this.state;
         const movies = paginate(this.state.movies, currentPage, pageSize);
-        console.log(movies);
+        this.state.filtered = selectedGenre ? this.state.movies.filter(m => m.genre._id === selectedGenre._id) : movies;
+        
+        // console.log('filtered', this.state.filtered);
+        // console.log('selectedGenre',selectedGenre);
+        
 
         return (
             <React.Fragment>
-                
                 <div className="row">
                     <h1>Vidly Project</h1>
                 </div>
 
                 <div className="row">
-
                     <aside className="col-md-3">
                         <ListGroup
-                        genres={ genres }
-                        selectedGenre={this.state.selectedGenre} 
-                        onGenreSelected={this.handleGenresSelect} />
+                            genres={genres}
+                            selectedGenre={this.state.selectedGenre}
+                            onGenreSelected={this.handleGenresSelect}/>
                     </aside>
 
                     <section className="col-md-9">
-
-                        {movies.length ? (
+                        {this.state.filtered.length ? (
                             <table className="table text-center">
                                 <thead>
                                     <tr>
@@ -80,7 +76,7 @@ class Movie extends Component {
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {movies.map((item, index) => (
+                                    {this.state.filtered.map((item) => (
                                         <tr key={item._id}>
                                             <td>{item.title}</td>
                                             <td>{item.genre.name}</td>
@@ -89,7 +85,7 @@ class Movie extends Component {
                                             <td>
                                                 <button
                                                     onClick={() =>
-                                                        this.movieDelete(index)
+                                                        this.movieDelete(item)
                                                     }
                                                     className="btn btn-danger btn-sm"
                                                 >
@@ -123,7 +119,7 @@ class Movie extends Component {
                             </div>
                         )}
                         <Pagination
-                            itemsCount={this.state.movies.length}
+                            itemsCount={!selectedGenre ? this.state.movies.length : this.state.filtered.length }
                             pageSize={pageSize}
                             currentPage={currentPage}
                             onPageChange={this.handlePageChange}
@@ -134,10 +130,10 @@ class Movie extends Component {
         );
     }
 
-    handleGenresSelect = (genre) => {
-        console.log(genre);
+    handleGenresSelect = genre => {
+        // console.log(genre);
         this.setState({ selectedGenre: genre });
-    }
+    };
 
     handlePageChange = page => {
         this.setState({ currentPage: page });
@@ -160,10 +156,13 @@ class Movie extends Component {
     };
 
     movieDelete = item => {
-        const { movies } = this.state;
-        const currentIndex = item;
-        movies.splice(currentIndex, 1);
-        this.setState(movies);
+        const { movies, selectedGenre, filtered } = this.state;
+        let dynamicArray = !selectedGenre ? movies : filtered;
+
+        const index = dynamicArray.indexOf(item);
+        dynamicArray[index] = { ...dynamicArray[index] };
+        dynamicArray.splice(index, 1)
+        this.setState({ movies: dynamicArray });
     };
 }
 
