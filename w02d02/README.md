@@ -444,5 +444,38 @@ Back to `ListGroup`:
                 </li>
 ```
 
-## Implmenting Filtering
+## Implementing Filtering
+
+We are ready to filter our movies. Here...
+
+```
+const movies = paginate(this.state.movies, currentPage, pageSize);
+```
+
+...we call the paginate method to paginate the movies. We need to apply the filter before pagination, because the number of pages should be based in the number of filtered movies.
+
+```
+const { pageSize, currentPage, genres, selectedGenre} = this.state;
+        
+const movies = paginate(this.state.movies, currentPage, pageSize);
+
+const filtered = selectedGenre ? this.state.movies.filter(m => m.genre._id === selectedGenre._id) : movies;
+```
+
+
+then...
+
+```
+<Pagination
+    itemsCount={!selectedGenre ? this.state.movies.length : filtered.length }
+    pageSize={pageSize}
+    currentPage={currentPage}
+    onPageChange={this.handlePageChange}
+/>
+```
+
+
+
+
+
 
