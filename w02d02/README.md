@@ -254,6 +254,195 @@ Pagination.propTypes = {
 }
 ```
 
+#Filtering
+
+## Component Interface
+
+What's the `ListGroup` component Interface?
+
+- As `input` it should reive a list of `genres`
+
+Now we could initialise `genres` the same way we did for movies
+
+```
+class Movie extends Component {
+    state = {
+        movies: getMovies(),
+        genres: getGenres(),
+   };
+```
+
+but the right place is inside `componentDidMount()`: this method is called after our component is rendered into the DOM and it's the perfect place to make *AJAX* calls to get data from the server.
 
 
+```
+componentDidMount() {
+        this.setState({ movies: this.getInitialState(), genres: getGenres() });
+    }
+```
+
+- What kind of `event` should it raise?
+	- we expect as minimum to get onClick the current *genre* selected.
+
+So here's is our `interface`:
+
+```
+<aside className="col-md-3">
+	<ListGroup genres={ genres } onGenreSelected={this.handleGenresSelect} />
+</aside>
+``` 		
+
+## Displaying Items
+
+```
+const ListGroup = props => {
+    const { genres } = props;
+    console.log("props list-group", genres);
+    return (
+        <ul className="list-group">
+            {genres.map(genre => (
+                <li key={ genre._id } className="list-group-item">
+                    { genre.name }
+                </li>
+            ))}
+        </ul>
+    );
+};
+```
+
+> We are assuming that each obj has 2 properties:
+> 
+>   `{ _id: "5b21ca3eeb7f6fbccd471818", name: "Action" }` 
+> 
+> What if we are facing a different kind of obj which doesn't have these properties?
+
+```
+<aside className="col-md-3">
+    <ListGroup
+    
+    textProperties="name" 
+    valueProperties="_id" 
+    
+    genres={ genres } 
+    onGenreSelected={this.handleGenresSelect} />
+</aside>
+```
+
+By Passing these 2 'extra' properties we can work with any kind of obj.
+
+
+```
+const ListGroup = props => {
+
+    const { genres, textProperty, valueProperty } = props;
+    
+    return (
+        <ul className="list-group">
+            {genres.map(item => (
+            
+                <li key={ item[valueProperty] } className="list-group-item">
+                    { item[textProperty] }
+                </li>
+                
+            ))}
+        </ul>
+    );
+};
+
+export default ListGroup;
+
+```
+
+In this way it's no longer bond to `genre` and **It can be reused everywhere**.
+
+
+
+## Default Props
+
+```
+<aside className="col-md-3">
+    <ListGroup
+    
+    textProperties="name" 
+    valueProperties="_id" 
+    
+    genres={ genres } 
+    onGenreSelected={this.handleGenresSelect} />
+</aside>
+```
+
+Here we are passing some extra props but as we can see it makes our code a bit more verbose.
+
+> How can we avoid that?
+
+```
+<ul className="list-group">
+    {genres.map(item => (
+        <li key={ item[valueProperty] } className="list-group-item">
+            { item[textProperty] }
+        </li>
+    ))}
+</ul>
+
+
+ListGroup.defaultProps = {
+    textProperty: 'name',
+    valueProperty: '_id'
+}
+
+```
+
+
+...and finally:
+
+```
+<aside className="col-md-3">
+    <ListGroup
+    genres={ genres } 
+    onGenreSelected={this.handleGenresSelect} />
+</aside>
+```
+
+## Handling Selection
+
+Now we wanna handle the `onClick` event 
+
+```
+{genres.map(item => (
+	<li onClick={ () => onGenreSelected(item) }
+```
+
+and to send back the current item to `ListGroup` component we update the `state `like this:
+
+
+```
+handleGenresSelect = (genre) => {
+        this.setState({ selectedGenre: genre });
+    }
+```
+and then:
+
+```
+<ListGroup
+    genres={ genres }
+    
+    selectedGenre={this.state.selectedGenre} 
+    
+    onGenreSelected={this.handleGenresSelect} />
+```
+
+Back to `ListGroup`:
+
+```
+ const { genres, textProperty, valueProperty, onGenreSelected, selectedGenre } = props;
+    return (
+        <ul className="list-group">
+            {genres.map(item => (
+                <li onClick={ () => onGenreSelected(item) } key={ item[valueProperty] } 
+                className={ item === selectedGenre ? "list-group-item active" : "list-group-item" }>
+                    { item[textProperty] }
+                </li>
+```
+
+## Implmenting Filtering
 
