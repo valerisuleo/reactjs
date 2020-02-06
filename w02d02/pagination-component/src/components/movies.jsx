@@ -1,28 +1,31 @@
-import React, { Component, cloneElement } from "react";
+import React, { Component, Fragment } from "react";
 import { getMovies } from "../services/fakeMovieService";
 import Like from "./common/like";
 import Pagination from "./common/pagination";
 import { paginate } from "../utilities/paginate";
-import { getGenres, genres } from "../services/fakeGenreService";
 import ListGroup from "./common/listGroup";
+import { getGenres } from "../services/fakeGenreService";
 
 class Movie extends Component {
     state = {
         movies: [],
         genres: [],
         pageSize: 4,
-        currentPage: 1,
+        currentPage: 1
     };
 
-    constructor() {
-        super();
-        this.state.movies = this.getInitialMoviesState();
-        this.state.genres = this.getInitialGenreState();
-        console.log('this.state.genre', this.state.genres);
-        // console.log(this.state.movies);
-    }
+    // constructor() {
+    //     super();
+    //     console.log(this.state.movies);
+    //     this.state.movies = this.getInitialState();
+    // }
 
-    getInitialMoviesState() {
+    componentDidMount() {
+        this.setState({ movies: this.getInitialState(), genres: getGenres() });
+    }
+    
+
+    getInitialState() {
         const movies = getMovies();
         const moviesClone = movies.map(item => {
             const obj = {
@@ -33,48 +36,30 @@ class Movie extends Component {
         });
         return moviesClone;
     }
-    
-    getInitialGenreState() {
-        const genres = getGenres();
-        const genresAll = {
-            _id: '5b21ca3eeb7f6fbccd471811',
-            name: 'All Genres',
-            isActive: true
-        }
-        
-        const genresClone = [...genres].map((item) => {
-            return {
-                ...item,
-                isActive: false
-            }
-        });
-
-        genresClone.unshift(genresAll);
-        return genresClone;
-    }
 
     render() {
         const { pageSize, currentPage, genres } = this.state;
         const movies = paginate(this.state.movies, currentPage, pageSize);
+        console.log(movies);
 
         return (
             <React.Fragment>
-
+                
                 <div className="row">
-                    <div className="col m-3">
-                        <h1>iMovies</h1>
-                    </div>
+                    <h1>Vidly Project</h1>
                 </div>
 
                 <div className="row">
 
                     <aside className="col-md-3">
-                        <ListGroup 
-                        onChangedGenre={this.handleGenreChange} 
-                        genres={ genres } />
+                        <ListGroup
+                        genres={ genres }
+                        selectedGenre={this.state.selectedGenre} 
+                        onGenreSelected={this.handleGenresSelect} />
                     </aside>
 
                     <section className="col-md-9">
+
                         {movies.length ? (
                             <table className="table text-center">
                                 <thead>
@@ -83,15 +68,15 @@ class Movie extends Component {
                                         <th scope="col">Genre</th>
                                         <th scope="col">Stock</th>
                                         <th scope="col">Rate</th>
+                                        <th scope="col"></th>
                                         <th scope="col">
                                             <button
-                                                onClick={this.resetHeart}
+                                                onClick={this.reset}
                                                 className="btn btn-secondary btn-sm"
                                             >
                                                 Reset
                                             </button>
                                         </th>
-                                        <th scope="col"></th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -102,14 +87,6 @@ class Movie extends Component {
                                             <td>{item.numberInStock}</td>
                                             <td>{item.dailyRentalRate}</td>
                                             <td>
-                                                <Like
-                                                    onLiked={() =>
-                                                        this.handleLike(item)
-                                                    }
-                                                    isLiked={item.isLiked}
-                                                />
-                                            </td>
-                                            <td>
                                                 <button
                                                     onClick={() =>
                                                         this.movieDelete(index)
@@ -118,6 +95,14 @@ class Movie extends Component {
                                                 >
                                                     Delete
                                                 </button>
+                                            </td>
+                                            <td>
+                                                <Like
+                                                    onLiked={() =>
+                                                        this.handleLike(item)
+                                                    }
+                                                    isLiked={item.isLiked}
+                                                />
                                             </td>
                                         </tr>
                                     ))}
@@ -149,39 +134,9 @@ class Movie extends Component {
         );
     }
 
-    handleGenreChange = (genre) => {
-        this.filterActive(genre);
-
-        if (genre.name === 'All Genres') return this.getAllGenres();
-        // else...
-        this.state.movies = this.getInitialMoviesState();
-        const clone = [...this.state.movies];
-        const moviesFiltered = this.filterMovies(clone, genre);
-        this.setState({ movies: moviesFiltered });
-    };
-
-    filterActive(genre) {
-        const { genres } = this.state;
-        
-        genres.forEach((item) => {
-            item.isActive = false;
-        });
-        
-        const current = genres.find((item) => {
-            return item.name === genre.name;
-        });
-        current.isActive = true;
-    }
-
-    getAllGenres() {        
-        this.state.movies = this.getInitialMoviesState();
-        this.setState({ movies: this.state.movies });
-    }
-
-    filterMovies(arr, obj) {
-        return arr.filter((item) => {
-            return item.genre.name === obj.name;
-        });
+    handleGenresSelect = (genre) => {
+        console.log(genre);
+        this.setState({ selectedGenre: genre });
     }
 
     handlePageChange = page => {
@@ -193,12 +148,14 @@ class Movie extends Component {
         this.setState({ isLiked: item.isLiked });
     };
 
-    resetHeart = () => {
+    reset = () => {
         const { movies } = this.state;
+
         movies.map(item => {
             item.isLiked = false;
             return item;
         });
+
         this.setState(movies);
     };
 
