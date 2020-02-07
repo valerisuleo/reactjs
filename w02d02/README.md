@@ -474,8 +474,41 @@ then...
 />
 ```
 
+### Adding all Genres
+
+We wanto to add a *All Genres* btn at the top of our `GroupList`. In this way when user click on it will display the all list of movies.
+
+```
+componentDidMount() {
+        this.setState({ movies: this.getInitialState(), genres: getGenres() });
+```
+
+we wanto to do something:
+
+```
+componentDidMount() {
+        const genres = [{ name: 'All Genres' }, ...getGenres()]
+        this.setState({ movies: this.getInitialState(), genres: genres });
+    }
+```
+
+Now on the top we can see our `btn` but we we click on it the list is `0`
+
+> Why?
 
 
+```
+ this.state.filtered = selectedGenre ? 
+ this.state.movies.filter(m => m.genre._id === selectedGenre._id) : movies;
+```
+
+This is happening because `const genres = [{ name: 'All Genres' }, ...getGenres()]`  doesn't have an `id`.
+
+> How can we fix it?
 
 
+```
+this.state.filtered = selectedGenre && selectedGenre._id ? 
+this.state.movies.filter(m => m.genre._id === selectedGenre._id) : movies;
+```
 
