@@ -16,7 +16,8 @@ class Movie extends Component {
     };
 
     componentDidMount() {
-        this.setState({ movies: this.getInitialState(), genres: getGenres() });
+        const genres = [{ name: 'All Genres' }, ...getGenres()]
+        this.setState({ movies: this.getInitialState(), genres: genres });
     }
 
     getInitialState() {
@@ -35,10 +36,11 @@ class Movie extends Component {
 
         const { pageSize, currentPage, genres, selectedGenre } = this.state;
         const movies = paginate(this.state.movies, currentPage, pageSize);
-        this.state.filtered = selectedGenre ? this.state.movies.filter(m => m.genre._id === selectedGenre._id) : movies;
+        this.state.filtered = selectedGenre && selectedGenre._id ? 
+        this.state.movies.filter(m => m.genre._id === selectedGenre._id) : movies;
         
-        // console.log('filtered', this.state.filtered);
-        // console.log('selectedGenre',selectedGenre);
+        console.log('filtered', this.state.filtered);
+        console.log('selectedGenre',selectedGenre);
         
 
         return (
@@ -119,7 +121,8 @@ class Movie extends Component {
                             </div>
                         )}
                         <Pagination
-                            itemsCount={!selectedGenre ? this.state.movies.length : this.state.filtered.length }
+                            itemsCount={!selectedGenre || selectedGenre.name === 'All Genres' ? 
+                            this.state.movies.length : this.state.filtered.length }
                             pageSize={pageSize}
                             currentPage={currentPage}
                             onPageChange={this.handlePageChange}
