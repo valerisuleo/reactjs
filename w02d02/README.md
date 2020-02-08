@@ -512,3 +512,74 @@ this.state.filtered = selectedGenre && selectedGenre._id ?
 this.state.movies.filter(m => m.genre._id === selectedGenre._id) : movies;
 ```
 
+# Sorting
+
+
+## Implementing Sorting
+
+- Add an event listener to sort each `column`
+
+```
+const MoviesTable = (props) => {
+    const { filtered, onDelete, onLiked, onSort } = props;
+
+    return (
+        <table className="table text-center">
+            <thead>
+                <tr>
+                    <th onClick={ () => onSort('title') } scope="col">Title</th>
+                    <th onClick={ () => onSort('genre.name') } scope="col">Genre</th>
+                    <th onClick={ () => onSort('numberInStock') } scope="col">Stock</th>
+                    <th onClick={ () => onSort('dailyRentalRate') } scope="col">Rate</th>
+```
+
+- As usual we handle the event in the parent compoment:
+
+```
+ handleSort = (e) => {
+        console.log(e);
+        this.setState({ sortColumn: { path: path, order: 'asc' } })
+    };
+```
+
+- We want also be sure to establish a default order when we load the page:
+
+```
+class Movie extends Component {
+    state = {
+        movies: [],
+        genres: [],
+        filtered: [],
+        pageSize: 4,
+        currentPage: 1,
+        sortColumn: { path: 'title', order: 'asc' }
+    };
+```
+
+###### This is the correct order to execute the following operations in order to sort the column:
+
+1. Filter the data
+2. **Sorting** the data
+3. Paginate the data
+
+
+```
+this.state.filtered = selectedGenre && selectedGenre._id ? 
+	this.state.movies.filter( m => m.genre._id === selectedGenre._id) : movies;
+        
+        const sorted = _.orderBy(this.state.filtered, [sortColumn.path], [sortColumn.order])
+        
+        const movies = paginate(sorted, currentPage, pageSize);
+```
+
+> We used *lodash* again. `_.orderBy()` will take as args: 
+> 
+> 1. array of filtered movies;
+> 2. array of *path* name
+> 3. array of *order*
+
+This will return a new array we called `sorted` and then we pass that to our paginate function `const movies = paginate(sorted, currentPage, pageSize);`
+ 
+
+**N.B.** Our code diverged from the lessons. To complete the sorting follow the videos...
+ 
