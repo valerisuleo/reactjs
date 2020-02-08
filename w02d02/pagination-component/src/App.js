@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import "./App.css";
-import Movies from "./components/movies";
+import Movies from "./components/movies/movies";
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { fab } from '@fortawesome/free-brands-svg-icons'
 import { faHeart as fasFaHeart } from '@fortawesome/free-solid-svg-icons'
