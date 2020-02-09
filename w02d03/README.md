@@ -216,7 +216,7 @@ const Posts = props => {
 It will return: `{approved: "true", sortBy: "newest"}`
 
 
-## Redirects
+## Redirects - 404
 
 If the `url` doen't exist we want to redirect the user to `/not-found` page.
 
