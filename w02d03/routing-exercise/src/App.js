@@ -19,7 +19,7 @@ class App extends Component {
                     <Route path="/customers" component={ CustomersIndex }></Route>
                     <Route path="/movies/:id" component={ MovieShow }></Route>
                     <Route path="/movies" component={ Movies }></Route>
-                    <Route path="/" component={ Movies }></Route>
+                    <Route path="/" exact component={ Movies }></Route>
                 </Switch>
             </div>
             
