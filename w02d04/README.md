@@ -253,65 +253,184 @@ At the moment we are repeating ourself which is not good:
 
 ## Validation
 
+For now we just going to validate `onSubmit` the form.
 
+1. Let's update our `state`
 
+	```
+	state = {
+	    account: { username: "", password: "" },
+	    errors: {}
+	};
 	
+	```
+
+2. we have to update the `handleSubmit` as well
+
+	```
+	handleSubmit = e => {
+	    e.preventDefault();
+	    
+	    const errors = this.validate();
+	    this.setState({ errors });
 	
+	    if (errors) return;
+	};
 	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+	```
+
+	> **Explenation of the code**: The `validate()` method will return an obj. We get that obj error and then call  `this.setState({ errors });` which will cause a rerendering and with that we can render *error messages*.
 
 
+3. Let's build a very simple `validate()` method
+
+	```
+	 validate = () => {
+	        return {username: 'usename is required.'}
+	    }
+	```
 
 
+Now in react dev tool we should see our error obj on submit.
 
 
+### Validation with Joi
+
+To implement validation rules we are going to use a library called *Joi*
+
+```
+// EXAMPLE
+
+const Joi = require('joi');
+ 
+const schema = Joi.object().keys({
+    username: Joi.string().alphanum().min(3).max(30).required(),
+    password: Joi.string().regex(/^[a-zA-Z0-9]{3,30}$/),
+    access_token: [Joi.string(), Joi.number()],
+    birthyear: Joi.number().integer().min(1900).max(2013),
+    email: Joi.string().email({ minDomainAtoms: 2 })
+}).with('username', 'birthyear').without('password', 'access_token');
+ 
+```
+
+Basically the idea behind *Joi* is to define a `schema` which is a simple obj: in this obj we are going to add all our properties and their validation requirements.
+
+- `npm i joi-browser --save`
+
+- back to `loginForm`:
+
+```
+import Joi from 'joi-browser'
+
+class LoginForm extends Component {
+    schema = {
+        username: Joi.stringify().required(),
+        password: Joi.stringify().required()
+    }
+```
+
+- Now we need to update our validate method on submit using `Joi.validate()`, it will take 2 args: the first one is the obj that we wanto to validate and the second one is the `schema`.
+
+```
+ validateWholeFormOnSubmit = () => {
+       const result =  Joi.validate(this.state.account, this.schema);
+    };
+    
+```
+
+> We got a compilation error: *Cannot read property 'username' of undefined*
+> 
+> Why?
+
+This is happening because inside the `state` we cannot set a property equal to `null` 
 
 
+We have to replace this:
+
+```
+handleSubmit = e => {
+        e.preventDefault();
+        const errors = this.validateWholeFormOnSubmit();
+        
+        this.setState({ errors });
+        
+        if (errors) return;
+    };
+```
+
+wth something like this one and worst scenatio set it to an empty `{}`
+
+```
+handleSubmit = e => {
+        e.preventDefault();
+        const errors = this.validateWholeFormOnSubmit();
+        
+        this.setState({ errors: errors || {} });
+        
+        if (errors) return;
+    };
+```
 
 
+Now if we put a `log` on `Joi.validate(this.state.account, this.schema);` and we navigate error/details we can see that in this `arr` currently we have only 1 item because by default Joi terminates validation as soon as it finds an error. This is what we called `abortEarly`.
 
+![Imgur](https://www.dropbox.com/s/2l71orha2xeiha8/joi%20log.png?raw=1)
 
+> How can fix this problem ?
 
+We simply pass another arg: `Joi.validate(this.state.account, this.schema, { abortEarly: false });`
 
+Now back to log we can see the `details[]` containing 2 items.
 
+We set in the state our `error` obj which is mirroring the `account` obj for our form
 
+```
+account: {
+        password: "",
+        username: ""
+    },
+    errors: {}
+```
 
+It means that in order to display our validation message we expect our `validation()` method to return onsubmit something like this:
 
+```
+return {
+            username: 'username is required.',
+            password: 'password is required.',
+        }
+```
 
+> Wait! *Joi* return to us an `[{},{}]`!
+> 
+>**How can we convert an** `[{},{}]` **into an** `{}` ?
 
+Just like that:
 
+```
+validateWholeFormOnSubmit = () => {
+        const abortEarly = { abortEarly: false };
+        
+        const result = Joi.validate(
+            this.state.account,
+            this.schema,
+            abortEarly
+        );
 
-
-
-
-
-
-
-
-
-
-
-
-
+        const { details } = result.error;
+        
+        const mapped = details.map(item => {
+            const key = item.path[0];
+            const value = item.message.replace(/['"]+/g, '');
+            return {
+                [key]: value
+            };
+        });
+        
+        const errors = Object.assign({}, ...mapped );
+        return errors;
+    };
+```
 
 
 
