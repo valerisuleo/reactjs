@@ -9,7 +9,7 @@ In this section...
 - Search Filter
 
 
-##Building Bootstrap Form
+## Building Bootstrap Form
 
 ```
 // loginForm.jsx
