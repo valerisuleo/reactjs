@@ -150,7 +150,7 @@ export default NavBar;
 
 ## Route Props
 
-If we inspect the liks we can see that we can get for free the following `props`
+If we inspect the liks we can see that **we can get for free** the following `props`
 
 ![Imgur](https://www.dropbox.com/s/kj1tp68q3ybzq7s/route%20props.png?raw=1)
 

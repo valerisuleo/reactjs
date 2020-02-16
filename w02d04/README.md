@@ -3,8 +3,8 @@
 In this section...
 
 - Form
-- Validation
 - Login Form
+- Validation
 - Register Form
 - Search Filter
 
@@ -408,7 +408,7 @@ return {
 Just like that:
 
 ```
-validateWholeFormOnSubmit = () => {
+validateOnSubmit = () => {
         const abortEarly = { abortEarly: false };
         
         const result = Joi.validate(
@@ -434,20 +434,534 @@ validateWholeFormOnSubmit = () => {
 
 
 
+#### Validating Single Input while typing with Joi
+
+We know already that `Joi.validate(arg1, arg2)` takes at least 2 args:
+
+- obj to validate
+- schema
+
+> What will be the obj to validate?
+
+It can't be anymore `Joi.validate(this.state.account)` because this refers to both the inputs fields while we want to validate them one by one. We want only the `current` one:
+
+
+```
+ validateOnTyping = (e) => {
+     const current = e.target;
+     const key = current.name;
+     const value = current.value;
+
+     const objToValidate = {
+         [key]: value
+     }
+  }
+```
+
+
+> What will be the schema?
+
+We need to pass a **sub-schema**
+
+```
+ validateOnTyping = (e) => {
+     const current = e.target;
+     const key = current.name;
+     const value = current.value;
+
+     const objToValidate = {
+         [key]: value
+     };
+
+     const subSchema = {
+         [key]: this.schema[key]
+     };
+}
+
+```
+
+We get this value (`this.schema[key]`) from here
+
+```
+class LoginForm extends Component {
+    schema = {
+        username: Joi.stringify().required(),
+    }
+```
+
+
+> What about `const abortEarly = { abortEarly: false };` ?
+
+We don't need it, in fact we want to abort early because there might be 3 validation errors with the given field and we don't wanna display all those validations err at once. Bad UX!
 
 
 
+```
+    validateOnTyping = e => {
+        const current = e.target;
+        const key = current.name;
+        const value = current.value;
+
+        const objToValidate = {
+            [key]: value
+        };
+
+        const subSchema = {
+            [key]: this.schema[key]
+        };
+
+        const result = Joi.validate(objToValidate, subSchema);
+
+        if (!result.error) {
+            return null;
+        } else {
+            const errMsg = result.error.details[0].message;
+            return errMsg.replace(/['"]+/g, "");
+        }
+    };
+```
+
+and we need to update also 
+
+```
+handleChange = e => {
+        const currentInput = e.target;
+        const errors = { ...this.state.errors };
+        const account = { ...this.state.account };
+        const errMsg = this.validateOnTyping(e);
+
+        if (errMsg) {
+            errors[currentInput.name] = errMsg;
+        } else {
+        // WE NEED THIS TO MAKE DISAPPEAR THE ERRORS FROM... 
+        // ...THE FORM WHEN WE TYPE AGAIN!!!
+            delete errors[currentInput.name];
+        }
+        
+        account[currentInput.name] = currentInput.value;
+        
+        this.setState({ account, errors: errors || {} });
+    };
+```
 
 
+## Refactoring
+
+### Extracting a Reusable Form component
 
 
+**1)** This `account` property is too specific we want something more generic to make it resusable such as `data`
+
+```
+const state = {
+    data: {
+        password: "",
+        username: "",
+    },
+    errors: {}
+}
+```
+
+**2)** Let's make a generic form component `form.jsx`
+
+```
+import React, { Component } from 'react';
+
+class Form extends Component {
+    state = {  }
+    render() { 
+        return (  );
+    }
+}
+ 
+export default Form;
+```
+
+We know that each form should have like this:
+
+```
+const state = {
+    data: {},
+    errors: {}
+}
+
+```
+
+so we import `state`
+
+```
+import state from './state'
+
+class Form extends Component {
+    state = state
+```
+
+**3)** It's validations method turn to be moved:
+
+```
+import React, { Component } from 'react';
+import state from './state'
+
+// REMEBER TO IMPORT JOI!!!
+import Joi from 'joi-browser'
+
+class Form extends Component {
+    state = state
+
+    validateOnSubmit = () => {
+        const abortEarly = { abortEarly: false };
+        const result = Joi.validate(
+            this.state.data,
+            this.schema,
+            abortEarly
+        );
+
+        if (result.error) {
+            const { details } = result.error;
+
+            const mapped = details.map(item => {
+                const key = item.path[0];
+                const value = item.message.replace(/['"]+/g, "");
+                return {
+                    [key]: value
+                };
+            });
+
+            const errors = Object.assign({}, ...mapped);
+            return errors;
+        } else {
+            return null;
+        }
+    };
+
+    validateOnTyping = e => {
+        const current = e.target;
+        const key = current.name;
+        const value = current.value;
+
+        const objToValidate = {
+            [key]: value
+        };
+
+        const subSchema = {
+            [key]: this.schema[key]
+        };
+
+        const result = Joi.validate(objToValidate, subSchema);
+
+        if (!result.error) {
+            return null;
+        } else {
+            const errMsg = result.error.details[0].message;
+            return errMsg.replace(/['"]+/g, "");
+        }
+    };
+
+    render() { 
+        return (  );
+    }
+}
+ 
+export default Form;
+
+```
+
+This component **will not render** anything so we can `remove()` the render method:
+
+```
+...
+
+        if (!result.error) {
+            return null;
+        } else {
+            const errMsg = result.error.details[0].message;
+            return errMsg.replace(/['"]+/g, "");
+        }
+    };
+}
+ 
+export default Form;
+```
+
+**4)** It's `handleSubmit()` and `handleChange()` turn:
+
+```
+handleSubmit = e => {
+        e.preventDefault();
+        const errors = this.validateOnSubmit();
+        this.setState({ errors: errors || {} });
+        if (errors) return;
+    };
+```
+
+This is completley reusable but on submit we make a `POST` request to the server which will be different based on the form. We need to add a method *ad hoc*
+
+```
+ doSubmit = () => {
+    console.log('POST req on submit!');
+}
+```
+
+and we call it back is the `handleSubmit()`
+
+```
+handleSubmit = e => {
+        e.preventDefault();
+        const errors = this.validateOnSubmit();
+        this.setState({ errors: errors || {} });
+        if (errors) return;
+
+        this.doSubmit();
+    };
+```
+
+Back to `/loginForm` we define `state.data` for this specific form which is *login*:
+
+```
+import Form from "../common/form";
+
+class LoginForm extends Form {
+
+    state = {
+        data: {
+            password: "",
+            username: "",
+        },
+        errors: {}
+    }
+
+```
+
+### Extracting Helper Rendering Method
+
+We can still refactor something: for example we know for sure that a form must have a submit button so let's move it to `form.jsx` insiede a `fn` which return some markup:
+
+```
+renderSubmitBtn(label) {
+        return (
+            <button type="submit" className="btn btn-primary">
+               { label }
+            </button>
+        );
+    }
+```
+
+back to `loginForm` we can invoke this method
+
+```
+<Input
+    value={data.password}
+    onChange={this.handleChange}
+    id="password"
+    name="password"
+    label="Password"
+    errors={errors.password}
+/>
+
+    {this.renderSubmitBtn('Login')}
+    
+</form>
+```
 
 
+Now if we look at this component imported we can see we repeat quite often the word `username`:
+
+```
+<Input
+    value={data.username}
+    onChange={this.handleChange}
+    id="username"
+    name="username"
+    label="Username"
+    errors={errors.username}
+/>
+```
+
+Once again we move it to `form.jsx` inside a `fn` which return some markup:
 
 
+```
+renderInput(name, label, type) {
+        return (
+             <Input
+                name={name}
+                value={data[name]}
+                label={label}
+                type={text}
+                id={name}
+                onChange={this.handleChange}
+                errors={errors[name]}
+            />
+        );
+    }
+```
+
+> Remember to move also `const { data, errors } = this.state;`
+
+as usual we call it inside `loginForm`
+
+```
+<form onSubmit={this.handleSubmit}>
+	{this.renderInput("username", "Username", 'text')}
+	{this.renderInput("password", "Password", 'password')}
+	{this.renderSubmitBtn("Login")}
+</form>
+```
+
+If we look at the `Input` component
+
+```
+const Input = props => {
+    // console.log("Input", props);
+
+    const { name, label, value, onChange, errors, type } = props;
+
+    return (
+        <div className="form-group">
+            <label htmlFor={name}>{label}</label>
+            <input
+                value={value}
+                onChange={onChange}
+                label={label}
+                type={type}
+                id={name}
+                name={name}
+                className="form-control"
+            />
+```
+
+We can see a problem with this implementation: 
+
+`const { name, label, value, onChange, errors, type } = props;`
+
+> Everytime we add a new attr. we must add to the props obj and the line of code above is getting bigger. 
+> 
+> **How Can we fix it?**
+> 
+> We can use `...rest`
+
+So we a repetitive pattern:
+
+```
+<input
+    value={value}
+    onChange={onChange}
+    label={label}
+    type={type}
+```
+
+We can simply get rid of them and do:
+
+```
+    const { name, label, errors, ...rest } = props;
+
+    return (
+        <div className="form-group">
+            <label htmlFor={name}>{label}</label>
+            <input
+            
+                {...rest}
+                
+                label={label}
+                id={name}
+                name={name}
+                className="form-control"
+            />
+    );
+};
+``` 
+
+> **N.B.** we must keep `name={name}` and also `label={label}` because we are using it here: `<label htmlFor={name}>{label}</label>`
 
 
+## Register Form
 
+```
+class Register extends Form {
+    state = {
+        data: {
+            email: "",
+            password: "",
+            username: ""
+        },
+        errors: {}
+    };
 
+    schema = {
+        email: Joi.string()
+            .required()
+            .email()
+            .label("Email"),
+        password: Joi.string()
+            .required()
+            .min(5)
+            .label("Password"),
+        username: Joi.string()
+            .required()
+            .label("Username")
+    };
 
+    doSubmit = () => {
+        console.log("POST from '/register' ");
+    };
+
+    render() {
+        return (
+            <div>
+                <h1>Register</h1>
+                <form onSubmit={this.handleSubmit}>
+                    {this.renderInput("email", "Email", "email")}
+                    {this.renderInput("password", "Password", "password")}
+                    {this.renderInput("username", "Username", "username")}
+                    {this.renderSubmitBtn("Register")}
+                </form>
+            </div>
+        );
+    }
+}
+```
+
+## Form Edit
+
+So first we wanna retrieve our obj in order to updated it:
+
+```
+    componentDidMount() {
+        this.movieEdit();
+    }
+
+    movieEdit() {
+        const { id } = this.props.match.params
+        const movie = getMovie(id);
+    }
+```
+Now we wanto to prepopulate the form with the fetched data
+
+```
+    movieEdit() {
+        const { id } = this.props.match.params
+        const movie = getMovie(id);
+        const data = [...this.state.data];
+        
+        data.title = movie.title;
+        data.genres = movie.genre.name;
+        data.numberInStock = movie.numberInStock;
+        data.rate = movie.dailyRentalRate;
+
+        this.setState({ data })
+    }
+```
+
+So far so good!
+
+> In order to prepopulate the `<select>` because in react we **can't use** `selected` attr. In react things are slightly different: we just need to add the value attr again:
+
+```
+const { arrayOfOptions, name, label, onChange, errors, value} = props;
+<select       
+	value={value}
+	
+	label={label}
+	name={name}
+```
 
