@@ -70,8 +70,6 @@ const movies = [
 ];
 
 export function getMovies() {
-    // console.log('movies', movies);
-    
     return movies;
 }
 
@@ -96,7 +94,6 @@ export function updateMovie(id, updated, genreId) {
         numberInStock: +updated.numberInStock,
         dailyRentalRate: +updated.rate
     }
-
     //  using findIndex to find the index in the array of the object and replace it
     // let foundIndex = movies.findIndex(item => item._id === id)
     let foundIndex = movies.findIndex((item) => {

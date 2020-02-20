@@ -60,7 +60,7 @@ class MovieEdit extends Form {
         
         return (
             <div>
-                <h1>Movie Edit</h1>
+                <h1>Edit Movie</h1>
                 <form onSubmit={this.handleSubmit}>
                     {this.renderInput("title", "Title")}
                     {this.renderSelect("genres", "Genres", getGenres() )}
