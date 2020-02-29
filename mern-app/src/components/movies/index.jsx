@@ -41,7 +41,14 @@ class MovieIndex extends Component {
         const { movies } = this.state;
         return (
             <React.Fragment>
-                <h1>Index</h1>
+                <div className="row">
+                    <div className="col-md-3">
+                        <h1>Index</h1>
+                    </div>
+                    <div className="col-md-9">
+                        <button onClick={ ()=> this.navigateTo('/movies/new') } className="btn btn-primary m-2 mr-5 float-right">Add Movie</button>
+                    </div>
+                </div>
                 <table className="table">
                     <thead>
                         <tr>

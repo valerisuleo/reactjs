@@ -8,10 +8,11 @@ const Select = props => {
             <label htmlFor={name}>{label}</label>
             <select
                 value={value}
+                name={name}
                 onChange={onChange}
                 className="form-control"
-                name={name}
             >
+                <option value=""></option>
                 {arrayOfOptions.map(genre => (
                     <option key={genre.id} value={genre.name}>
                         {genre.name}

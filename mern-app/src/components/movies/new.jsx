@@ -3,7 +3,7 @@ import http from "../../services/httpService";
 import config from "../../config.json";
 import Form from "../common/form";
 
-class MovieEdit extends Form {
+class MovieNew extends Form {
     state = {
         data: {
             title: "",
@@ -17,27 +17,19 @@ class MovieEdit extends Form {
     };
 
     async componentDidMount() {
-        const id = this.props.match.params.id;
-        const response = await http.get(config.moviesAPI + `/${id}`);
-        const { data } = response;
-
         const all = await http.get(config.moviesAPI);
         this.getGenres(all);
-
-        this.setState({ data });
     }
 
     doSubmit = async () => {
-        const id = this.props.match.params.id;
-        const movieUpdated = {...this.state.data };        
-        await http.put(config.moviesAPI + `/${id}`, movieUpdated);
-        this.props.history.push('/movies');
+        
+        // this.props.history.push('/movies');
     }
 
     render() {
         return (
             <React.Fragment>
-                <h1>Edit</h1>
+                <h1>New</h1>
 
                 <form onSubmit={this.handleSubmit}>
 
@@ -54,4 +46,4 @@ class MovieEdit extends Form {
     }
 }
 
-export default MovieEdit;
+export default MovieNew;
