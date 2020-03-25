@@ -18,9 +18,14 @@ class Todos extends Form {
     };
 
     doSubmit = () => {
+        const data = {...this.state};
         const todos = [...this.state.todos];
+        let isOpen = {...this.state.isOpen};
+
         todos.push(this.state.data);
-        this.setState({ todos });
+        isOpen = false;
+        // update todos, hide form, clean input field
+        this.setState({ todos, isOpen, data });
     };
 
     toggle = () => {

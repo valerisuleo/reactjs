@@ -17,7 +17,6 @@ class Form extends Component {
         this.doSubmit();
     };
 
-
     renderBtn(btnName) { 
         return (
         <button className="btn btn-primary btn-sm">{btnName}</button>
