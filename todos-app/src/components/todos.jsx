@@ -1,7 +1,12 @@
 import React, { Component } from "react";
+import Form from "../common/form";
 
-class Todos extends Component {
+class Todos extends Form {
     state = {
+        data: {
+            task: "",
+            done: false
+        },
         todos: [
             { task: "washing", done: false },
             { task: "cleaning", done: false },
@@ -9,67 +14,56 @@ class Todos extends Component {
             { task: "sleep", done: false },
             { task: "buy shoes", done: false }
         ],
-        newItem: { task: "", done: false }
+        isOpen: false
     };
 
-    formShow = () => {
-        const newItem = { ...this.state.newItem };
-        newItem.task = '';
-        this.state.isClicked = true;
-        this.setState({ 
-            isClicked: this.state.isClicked, 
-            newItem 
-        });
-    }
-
-    handleChange = (e) => {
-        const newItem = { ...this.state.newItem };        
-        newItem.task = e.currentTarget.value;   
-        this.setState({ newItem });    
-    }
-
-    handleSubmit = e => {
-        e.preventDefault();
+    doSubmit = () => {
         const todos = [...this.state.todos];
-        todos.push(this.state.newItem);
-        this.state.isClicked = false;
-        this.setState({ 
-            todos, 
-            isClicked: this.state.isClicked 
-        });
+        todos.push(this.state.data);
+        this.setState({ todos });
+    };
+
+    toggle = () => {
+        this.setState(currentValue => ({
+            isOpen: !currentValue.isOpen
+        }));
     };
 
     render() {
-        const { todos, newItem } = this.state;
+        const { isOpen } = this.state;
 
         return (
-            <React.Fragment>
-                <h1>Todos App</h1>
-                <h3>You have {todos.length} todos to do!</h3>
+            <main className="container">
+                <h1 className="m-5">React todos-app: reusable form Component</h1>
 
-                <button onClick={this.formShow}>Add Todo</button>
+                <div className="row">
+                    <div className="col">
+                        <ul className="list-group mb-3">
+                            {this.state.todos.map(item => (
+                                <li className="list-group-item" key={item.task}>
+                                    {item.task}
+                                </li>
+                            ))}
+                        </ul>
 
-                {this.state.isClicked ? (
-                    <form onSubmit={this.handleSubmit}>
-                    <input
-                        type="text"
-                        name="newitem"
-                        value={newItem.task}
-                        onChange={this.handleChange}
-                        placeholder="what do you need to do?"
-                    />
+                        <button
+                            onClick={this.toggle}
+                            className="btn btn-primary">Add Todo
+                        </button>
+                    </div>
+                </div>
 
-                    <button>Add</button>
-                </form>
-                ) : null }
-                
-
-                <ul>
-                    {todos.map(item => (
-                        <li key={item.task}>{item.task}</li>
-                    ))}
-                </ul>
-            </React.Fragment>
+                <div className="row p-5">
+                    <div className="col">
+                        {isOpen ? (
+                            <form onSubmit={this.handleSubmit}>
+                                {this.renderInput("task")}
+                                {this.renderBtn("Add")}
+                            </form>
+                        ) : null}
+                    </div>
+                </div>
+            </main>
         );
     }
 }
