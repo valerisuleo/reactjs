@@ -4,7 +4,7 @@ import './App.css';
 import Donuts from './components/donuts';
 
 function App() {
-  return (
+    return (
     <Donuts></Donuts>
   );
 }

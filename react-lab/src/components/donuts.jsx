@@ -1,10 +1,16 @@
-import React, { Component } from "react";
+import React from "react";
+import Form from "../common/form";
+import DonutsTable from "./donutsTable";
 import _ from "lodash";
-import "../components/donuts.css";
 
-class Donuts extends Component {
+class Donuts extends Form {
     state = {
-        donutsList: [
+        data: {
+            style: "",
+            flavor: ""
+        },
+
+        donuts: [
             { style: "Old Fashioned", flavor: "Chocolate" },
             { style: "Cake", flavor: "Coconut" },
             { style: "Yeast", flavor: "Frosted" },
@@ -15,93 +21,95 @@ class Donuts extends Component {
             { style: "French Cruller", flavor: "Strawberry" },
             { style: "Fritter", flavor: "Apple" }
         ],
-        newDonut: { style: "", flavor: "" }
+        arrOptions: []
     };
 
     componentDidMount() {
-        const sortedDonutsList = this.sort(this.state.donutsList);
-        this.setState({ donutsList: sortedDonutsList });
+        const donuts = [...this.state.donuts];
+        this.setState({ arrOptions: this.getOptions(donuts) });
     }
-    
-    sort(arr) {
+
+    doSubmit = e => {
+        const donuts = [...this.state.donuts];
+        const donutNew = { ...this.state.data };
+        const cleanUp = { style: "", flavor: "" };
+
+        if (!donutNew.style) {
+            donutNew.style = "Cake";
+        }
+
+        donuts.unshift(donutNew);
+        this.setState({ donuts, data: cleanUp });
+    };
+
+    handleDelete = obj => {
+        const donuts = [...this.state.donuts];
+        let index = donuts.indexOf(obj);
+        donuts.splice(index, 1);
+        this.setState({ donuts });
+    };
+
+    handleSort = current => {
+        const { key } = current;
+        const donuts = [...this.state.donuts];
         const sortedDonutsList = _.orderBy(
-            arr,
-            [donut => donut.style.toLowerCase()],
+            donuts,
+            [donut => donut[key].toLowerCase()],
             ["asc"]
         );
-        return sortedDonutsList;
-    }
-
-    handleChange = e => {
-        const current = e.currentTarget;
-        const newDonut = { ...this.state.newDonut };
-
-        newDonut[current.name] = current.value;
-        this.setState({ newDonut });
-    };
-
-    handleSubmit = e => {
-        e.preventDefault();
-
-        let donutsList = [...this.state.donutsList];
-        const newDonut = { ...this.state.newDonut };
-        donutsList.push(newDonut);
-        donutsList = this.sort(donutsList);
-        this.setState({ donutsList });
-        this.state.newDonut.flavor = "";
-    };
-
-    handleDelete = donut => {
-        const donutsList = [...this.state.donutsList];
-        let index = donutsList.indexOf(donut);
-        donutsList.splice(index, 1);
-        this.setState({ donutsList });
+        this.setState({ donuts: sortedDonutsList });
     };
 
     render() {
-        const { donutsList, newDonut } = this.state;
+        const { donuts, arrOptions } = this.state;
+
         return (
-            <React.Fragment>
-                <div className="body">
-                    <h1>Total Donuts: {donutsList.length}</h1>
-                    <form onSubmit={this.handleSubmit}>
-                        <input
-                            type="text"
-                            name="flavor"
-                            value={newDonut.flavor}
-                            placeholder="What Type of Donut?"
-                            onChange={this.handleChange}
-                        />
+            <main className="container">
+                <h1>React Donuts App: {donuts.length}</h1>
 
-                        <select name="style" onChange={this.handleChange}>
-                            <option value=""></option>
-                            <option value="Old Fashioned">Old Fashioned</option>
-                            <option value="Cake">Cake</option>
-                            <option value="French Cruller">
-                                French Cruller
-                            </option>
-                            <option value="Yeast">Yeast</option>
-                        </select>
-
-                        <input type="submit" value="Save My Donut" />
-                    </form>
-
-                    <ul>
-                        {donutsList.map(donut => (
-                            <li key={donut.style}>
-                                {donut.style} - {donut.flavor}
-                                <button
-                                    onClick={() => this.handleDelete(donut)}
-                                >
-                                    Delete
-                                </button>
-                            </li>
-                        ))}
-                    </ul>
+                <div className="row">
+                    <div className="col-md-10 col-lg-12">
+                        <form onSubmit={this.handleSubmit}>
+                            <div className="row" style={this.styles}>
+                                <div className="col-4">
+                                    {this.renderInput(
+                                        "flavor",
+                                        "What's your flavor?"
+                                    )}
+                                </div>
+                                <div className="col-4">
+                                    {this.renderSelect(
+                                        "style",
+                                        "What's your style?",
+                                        arrOptions,
+                                        this.selectDefaultValue("style", "Cake")
+                                    )}
+                                </div>
+                                <div className="col-4 mt-3">
+                                    {this.renderBtn("Add Donut")}
+                                </div>
+                            </div>
+                        </form>
+                    </div>
                 </div>
-            </React.Fragment>
+
+                <div className="row mt-5">
+                    <div className="col-md-10 col-lg-12">
+                        <DonutsTable
+                            donuts={donuts}
+                            onDelete={this.handleDelete}
+                            onSort={this.handleSort}
+                        />
+                    </div>
+                </div>
+            </main>
         );
     }
+
+    styles = {
+        display: "flex",
+        alignItems: "center"
+    };
 }
 
 export default Donuts;
