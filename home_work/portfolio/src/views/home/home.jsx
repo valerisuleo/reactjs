@@ -1,6 +1,9 @@
-import React, { Component, Fragment } from "react";
+import React, { Component } from "react";
 import "./home.scss";
-import "./animate.scss";
+import soundClick from "../../sounds/click.wav";
+import soundCursor from "../../sounds/cursor.wav";
+import soundHeartBeat from "../../sounds/beat.mp3";
+
 import Circle from "./circle";
 
 class Home extends Component {
@@ -8,50 +11,84 @@ class Home extends Component {
         circles: [
             {
                 color: "grey",
-                isOpen: false,
+                isOpen: true,
                 isActive: false,
                 label: "About",
             },
             {
                 color: "black",
-                isOpen: false,
+                isOpen: true,
                 isActive: false,
                 label: "Portfolio",
             },
-        
+
             {
                 color: "silver",
-                isOpen: false,
+                isOpen: true,
                 isActive: false,
                 label: "Contact",
             },
         ],
+        isTransitionEnd: false,
+        audioFx: null,
     };
 
     handleClick = (e) => {
+        const current = e;
+        if (!current.isOpen) {
+            this.playFx(soundClick);
+        }
         this.addClassOpen();
+        this.waitForTransitionEnd();
     };
 
     handleMouseOver = (e) => {
         const current = e;
-        console.log('current', current);
-
         current.isActive = true;
 
         const circles = [...this.state.circles];
         let index = circles.indexOf(current);
         circles[index] = current;
 
-        this.setState({ circles });
+        
+        
+        // if (current.isOpen && current.isActive) {
+            //     this.playFx(soundCursor);
+            // }
+            
+            this.setState({ circles });
+            this.playFx(soundHeartBeat);
     };
 
-    handleMouseOut = () => {
+    handleMouseOut = (e) => {
+        const current = e;
+        current.isActive = false;
+        const { audioFx } = this.state;
         const circles = [...this.state.circles];
-        circles.forEach((item) => {
-            item.isActive = false;
+
+        let index = circles.indexOf(current);
+        circles[index] = current;
+
+
+        audioFx.pause();
+        
+        this.setState({ circles })
+    }
+
+    waitForTransitionEnd() {
+        const circleBlack = document.getElementsByClassName("circle")[1];
+        circleBlack.addEventListener("webkitTransitionEnd", () => {
+            this.setState({ isTransitionEnd: true });
         });
-        this.setState({ circles });
-    };
+    }
+
+    playFx = (audioFile) => {
+        const audio = new Audio(audioFile);
+        if (audio !== undefined) {
+            this.setState({ audioFx: audio})
+            audio.play();
+        } 
+    }
 
     addClassOpen() {
         const circles = [...this.state.circles];
@@ -75,18 +112,19 @@ class Home extends Component {
     }
 
     render() {
-        const { circles } = this.state;
-
+        const { circles, isTransitionEnd } = this.state;
+        
         return (
             <React.Fragment>
                 {circles.map((item, i) => (
                     <Circle
                         key={i}
                         circle={item}
+                        isTransitionEnd={isTransitionEnd}
                         className={this.classesDynamic(item)}
-                        onClick={this.handleClick}
+                        onClick={() => this.handleClick(item)}
                         onMouseEnter={() => this.handleMouseOver(item)}
-                        onMouseLeave={this.handleMouseOut}
+                        onMouseLeave={()=> this.handleMouseOut(item)}
                     />
                 ))}
             </React.Fragment>
