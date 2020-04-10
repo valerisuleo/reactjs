@@ -1,9 +1,9 @@
 import React, { Component } from "react";
 import Circle from "./circle";
 import "./home.scss";
-import soundClick from "../../sounds/click.wav";
-import soundCursor from "../../sounds/cursor.wav";
-import soundHeartBeat from "../../sounds/beat.mp3";
+import soundClick from "../../../sounds/click.wav";
+import soundCursor from "../../../sounds/cursor.wav";
+import soundHeartBeat from "../../../sounds/beat.mp3";
 
 class Home extends Component {
     state = {
@@ -34,12 +34,18 @@ class Home extends Component {
 
     handleClick = (e) => {
         const current = e;
+        const { audioFx } = this.state;
+
         if (!current.isOpen) {
             this.playFx(soundClick);
         }
         current.isActive = false;
         this.addClassOpen();
         this.waitForTransitionEnd();
+
+        if (current.isOpen) {
+            audioFx.pause();
+        }
     };
 
     handleMouseOver = (e) => {
