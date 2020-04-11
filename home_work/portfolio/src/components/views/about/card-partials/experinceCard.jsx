@@ -1,6 +1,6 @@
 import React, { Component } from "react";
-import BootstrapCard from "../../common/bootstrap-card/bootstrapCard";
-import "./about.scss";
+import BootstrapCard from "../../../common/bootstrap-card/bootstrapCard";
+import './card.scss'
 
 class ExperienceCard extends Component {
     
@@ -10,7 +10,7 @@ class ExperienceCard extends Component {
         return (
             <div className="logo-frame">
                 <img
-                    src={require(`../../../images/${directory}/${path}.jpg`)}
+                    src={require(`../../../../images/${directory}/${path}.jpg`)}
                     className="card-img"
                 />
             </div>
@@ -27,7 +27,7 @@ class ExperienceCard extends Component {
         } = this.props.item;
 
         return (
-            <div className="card-body">
+            <div className="card-body experiences">
                 <h1 className="card-title">{title}</h1>
                 <p className="card-text">{company}</p>
                 <p className="card-text">{timeWindow}</p>

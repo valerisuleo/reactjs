@@ -6,7 +6,7 @@ function BootstrapCard(props) {
 
     return (
         <div className="card">
-            <div className="row no-gutters">
+            <div className="row no-gutters mb-5">
                 <aside className="col-md-4">{asideContent}</aside>
                 <section className="col-md-8">{sectionContent}</section>
             </div>

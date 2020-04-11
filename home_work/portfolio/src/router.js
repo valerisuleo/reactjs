@@ -5,6 +5,7 @@ import Portfolio from './components/views/portfolio/portfolio';
 import CloseWindow from './components/close-window/closeWindow';
 import About from './components/views/about/about';
 import Contact from './components/views/contact';
+import Footer from './components/footer/footer';
 
 class Router extends Component {
     render() {
@@ -17,6 +18,7 @@ class Router extends Component {
                     <Route path="/portfolio" component={Portfolio}></Route>
                     <Route path="/" component={Home}></Route>
                 </Switch>
+                <Footer></Footer>
             </Fragment>
         );
     }

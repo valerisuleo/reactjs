@@ -1,12 +1,13 @@
 import React, { Component, Fragment } from "react";
-import BootstrapJumbotron from "../../common/bootstrap-jumbotron/bootstrapJumbotron";
 import "./about.scss";
 import * as http from "../../../services/aboutService";
-import ExperienceCard from "./experinceCard";
-import EducationCard from "./educationCard";
 import highChartBarOptions from "./highChartBarOptions";
-import BarGraph from "../../common/bar-graph/barGraph";
-import BarSkillsCard from "./barCard";
+
+import BootstrapJumbotron from "../../common/bootstrap-jumbotron/bootstrapJumbotron";
+import ExperienceCard from "./card-partials/experinceCard";
+import EducationCard from "./card-partials/educationCard";
+import BarSkillsCard from "./card-partials/barCard";
+import Footer from '../../footer/footer';
 
 let lastScrollY = 0;
 
@@ -25,6 +26,10 @@ class About extends Component {
         const { experience, education } = response;
         this.setState({ experience, education });
     }
+
+    componentWillUnmount() {
+        window.removeEventListener('scroll', this.handleScroll);
+      };
 
     refOffSet = React.createRef();
 
@@ -51,7 +56,13 @@ class About extends Component {
     }
 
     render() {
-        const { experience, education, isVisible, options, waitForit } = this.state;
+        const {
+            experience,
+            education,
+            isVisible,
+            options,
+            waitForit,
+        } = this.state;
 
         return (
             <div className="container mt-5">
@@ -84,6 +95,7 @@ class About extends Component {
                                 Fox, Front End Team Lead @ appScatter.
                             </p>
                         </div>
+                        
                         <h4>Experiences</h4>
                         {experience.map((item, i) => (
                             <ExperienceCard
@@ -95,7 +107,15 @@ class About extends Component {
                         ))}
 
                         <div ref={this.refOffSet}>
-                            {isVisible ? <BarSkillsCard options={options} waitForit={waitForit} /> : null}
+                            {isVisible ? (
+                                <Fragment>
+                                    <h4>Skills</h4>
+                                    <BarSkillsCard
+                                    options={options}
+                                    waitForit={waitForit}
+                                />
+                                </Fragment>
+                            ) : null}
                         </div>
 
                         <h4>Education</h4>

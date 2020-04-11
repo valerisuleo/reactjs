@@ -15,7 +15,7 @@ const Circle = (props) => {
                 <div {...rest} className={className} />
             )}
 
-            <span>{circle.isActive && circle.isOpen && circle.label}</span>
+            <span className="label">{circle.isActive && circle.isOpen && circle.label}</span>
         </React.Fragment>
     );
 };
