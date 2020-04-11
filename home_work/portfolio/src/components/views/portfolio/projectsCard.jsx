@@ -20,6 +20,8 @@ class ProjectsCard extends Component {
 
     renderSection() {
         const { imgName, directory } = this.props;
+        console.log('imgName', imgName);
+        
         return (
             <img
                 src={require(`../../../images/${directory}/${imgName}.jpg`)}
