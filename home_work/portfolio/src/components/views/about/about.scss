@@ -20,7 +20,6 @@
 
 
 // ExperienceCard
-
 .card-body {
     .card-title {
         font-size: 18px;
@@ -69,4 +68,15 @@
     background-color: white;
     background-position: center;
     box-shadow: 0 10px 6px -6px #777;
+}
+
+.player {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.player-container {
+    min-height: 400px;
 }

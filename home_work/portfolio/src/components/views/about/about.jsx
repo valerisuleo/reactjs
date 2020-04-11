@@ -6,6 +6,7 @@ import ExperienceCard from "./experinceCard";
 import EducationCard from "./educationCard";
 import highChartBarOptions from "./highChartBarOptions";
 import BarGraph from "../../common/bar-graph/barGraph";
+import BarSkillsCard from "./barCard";
 
 let lastScrollY = 0;
 
@@ -14,6 +15,7 @@ class About extends Component {
         experience: [],
         education: [],
         isVisible: false,
+        waitForit: false,
         options: highChartBarOptions(),
     };
 
@@ -28,12 +30,14 @@ class About extends Component {
 
     handleScroll = () => {
         lastScrollY = window.scrollY;
-        // console.log('lastScrollY', lastScrollY);
         const { offsetTop } = this.refOffSet.current;
-        // console.log(offsetTop);
         if (lastScrollY >= offsetTop) {
-            console.log("fire!");
-            this.setState({ isVisible: true });
+            setTimeout(() => {
+                this.setState({ isVisible: true });
+            }, 500);
+            setTimeout(() => {
+                this.setState({ waitForit: true });
+            }, 3000);
         }
     };
 
@@ -47,7 +51,7 @@ class About extends Component {
     }
 
     render() {
-        const { experience, education, isVisible, options } = this.state;
+        const { experience, education, isVisible, options, waitForit } = this.state;
 
         return (
             <div className="container mt-5">
@@ -91,7 +95,7 @@ class About extends Component {
                         ))}
 
                         <div ref={this.refOffSet}>
-                            {isVisible ? <BarGraph options={options} /> : null}
+                            {isVisible ? <BarSkillsCard options={options} waitForit={waitForit} /> : null}
                         </div>
 
                         <h4>Education</h4>
