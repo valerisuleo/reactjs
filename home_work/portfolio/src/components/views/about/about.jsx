@@ -4,26 +4,50 @@ import "./about.scss";
 import * as http from "../../../services/aboutService";
 import ExperienceCard from "./experinceCard";
 import EducationCard from "./educationCard";
+import highChartBarOptions from "./highChartBarOptions";
+import BarGraph from "../../common/bar-graph/barGraph";
+
+let lastScrollY = 0;
 
 class About extends Component {
     state = {
         experience: [],
         education: [],
+        isVisible: false,
+        options: highChartBarOptions(),
     };
 
     componentDidMount() {
+        window.addEventListener("scroll", this.handleScroll);
         const response = http.getExpericencesAndEducation();
         const { experience, education } = response;
         this.setState({ experience, education });
     }
 
+    refOffSet = React.createRef();
+
+    handleScroll = () => {
+        lastScrollY = window.scrollY;
+        // console.log('lastScrollY', lastScrollY);
+        const { offsetTop } = this.refOffSet.current;
+        // console.log(offsetTop);
+        if (lastScrollY >= offsetTop) {
+            console.log("fire!");
+            this.setState({ isVisible: true });
+        }
+    };
+
     setPath(string) {
-        const path = `${string.replace(/\s/g, "").toLowerCase()}`;
+        let path = `${string.replace(/\s/g, "").toLowerCase()}`;
+
+        if (path.includes("à")) {
+            path = path.replace("à", "a");
+        }
         return path;
     }
 
     render() {
-        const { experience, education } = this.state;
+        const { experience, education, isVisible, options } = this.state;
 
         return (
             <div className="container mt-5">
@@ -65,8 +89,20 @@ class About extends Component {
                                 directory="about"
                             ></ExperienceCard>
                         ))}
+
+                        <div ref={this.refOffSet}>
+                            {isVisible ? <BarGraph options={options} /> : null}
+                        </div>
+
                         <h4>Education</h4>
-                        {education.map((item, i) => <EducationCard key={i} item={item}></EducationCard>)}
+                        {education.map((item, i) => (
+                            <EducationCard
+                                key={i}
+                                directory="about"
+                                path={this.setPath(item.nameInstitute)}
+                                item={item}
+                            ></EducationCard>
+                        ))}
                     </div>
                 </div>
             </div>

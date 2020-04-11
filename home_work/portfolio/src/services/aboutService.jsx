@@ -56,7 +56,7 @@ const about = {
         },
         {
             nameInstitute: "General Assembly",
-            educationLevel: "",
+            educationLevel: "Licenses & Certifications",
             field:
                 "An intensive full-time programme, teaching the fundamentals of Web Development through practical application delivered by industry experts. Throughout the course, we have built on working practises around TDD, daily standup, pair programming and presenting code to ensure real-world application.",
             when: "May 2017 – Aug 2017",
