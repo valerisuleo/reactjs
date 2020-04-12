@@ -6,8 +6,12 @@ class Contact extends Component {
         isFlipped: false,
     };
 
-    handleClick = () => {
+    handleMouseOver = () => {
         this.setState({ isFlipped: true });
+    };
+
+    handleMouseOut = () => {
+        this.setState({ isFlipped: false });
     };
 
     render() {
@@ -15,12 +19,13 @@ class Contact extends Component {
 
         return (
             <Fragment>
-                <button className="btn btn-primary" onClick={this.handleClick}>
-                    FlipMe
-                </button>
                 <div className="maincontainer">
-                    <div className="business-card-container">
+                    <div
+                        onMouseLeave={this.handleMouseOut}
+                        className="business-card-container"
+                    >
                         <div
+                            onMouseOver={this.handleMouseOver}
                             className={
                                 !isFlipped
                                     ? "business-card"

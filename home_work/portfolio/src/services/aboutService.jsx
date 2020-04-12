@@ -6,7 +6,7 @@ const about = {
             timeWindow: "Apr 2019 - Feb 2020",
             where: "London, UK",
             description:
-                "appScatter is a post IPO start-up based in central London. Tehy are developing a mobile app distribution platform that deploys our client’s apps to multiple app stores worldwide Working for this company helped me to obtain a solid understanding of JS object orientated development, allowed me to work on a large-scale commercial application and gave me a significant working experience with – and a desire to work using – agile methodologies, Angular 8, Typescript, Karma, Jasmine, Cypress, Highcharts",
+                "appScatter is a post IPO start-up based in central London. Tehy are developing a mobile app distribution platform that deploys our client’s apps to multiple app stores worldwide Working for this company helped me to obtain a solid understanding of JS object orientated development, allowed me to work on a large-scale commercial application and gave me a significant working experience with agile methodologies, Angular 8, Typescript, Karma, Jasmine, Cypress, Highcharts",
             
         },
         {
