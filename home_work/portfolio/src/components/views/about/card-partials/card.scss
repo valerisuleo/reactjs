@@ -1,5 +1,6 @@
 // ExperienceCard
-.experiences, .education {
+.experiences,
+.education {
     .card-title {
         font-size: 18px;
         font-weight: 700;
@@ -31,7 +32,6 @@
     }
 }
 
-
 .logo-frame {
     width: 100px;
     height: 100px;
@@ -51,24 +51,17 @@
 
 
 // GIF STREETFIGHTER
-.player {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-}
-
 .player-container {
     min-height: 470px;
+
+    img {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+    }
+
+    .won {
+        width: 25%;
+    }
 }
-
-// footer {
-//     p {
-//         font-size: 14px;
-//         position: absolute;
-//         top: 50%;
-//         left: 50%;
-//         transform: translate(-50%, -50%);
-
-//     }
-// }

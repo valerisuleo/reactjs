@@ -7,9 +7,6 @@ import BootstrapJumbotron from "../../common/bootstrap-jumbotron/bootstrapJumbot
 import ExperienceCard from "./card-partials/experinceCard";
 import EducationCard from "./card-partials/educationCard";
 import BarSkillsCard from "./card-partials/barCard";
-import Footer from '../../footer/footer';
-
-let lastScrollY = 0;
 
 class About extends Component {
     state = {
@@ -17,6 +14,7 @@ class About extends Component {
         education: [],
         isVisible: false,
         waitForit: false,
+        isGifChanged: false,
         options: highChartBarOptions(),
     };
 
@@ -34,17 +32,24 @@ class About extends Component {
     refOffSet = React.createRef();
 
     handleScroll = () => {
-        lastScrollY = window.scrollY;
+        const lastScrollY = window.scrollY;
         const { offsetTop } = this.refOffSet.current;
+        const isVisible = { isVisible: true };
+        const waitForit = { waitForit: true };
+        const isGifChanged = { isGifChanged: true };
+
         if (lastScrollY >= offsetTop) {
-            setTimeout(() => {
-                this.setState({ isVisible: true });
-            }, 500);
-            setTimeout(() => {
-                this.setState({ waitForit: true });
-            }, 3000);
+            this.delay(isVisible, 500)
+            this.delay(waitForit, 3000)
+            this.delay(isGifChanged, 4300)
         }
     };
+
+    delay(obj, timeout) {
+        setTimeout(() => {
+            this.setState(obj);
+        }, timeout);
+    }
 
     setPath(string) {
         let path = `${string.replace(/\s/g, "").toLowerCase()}`;
@@ -62,6 +67,7 @@ class About extends Component {
             isVisible,
             options,
             waitForit,
+            isGifChanged
         } = this.state;
 
         return (
@@ -113,6 +119,7 @@ class About extends Component {
                                     <BarSkillsCard
                                     options={options}
                                     waitForit={waitForit}
+                                    isGifChanged={isGifChanged}
                                 />
                                 </Fragment>
                             ) : null}

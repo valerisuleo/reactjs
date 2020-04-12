@@ -4,7 +4,7 @@ import Home from './components/views/home/home';
 import Portfolio from './components/views/portfolio/portfolio';
 import CloseWindow from './components/close-window/closeWindow';
 import About from './components/views/about/about';
-import Contact from './components/views/contact';
+import Contact from './components/views/contact/contact';
 import Footer from './components/footer/footer';
 
 class Router extends Component {

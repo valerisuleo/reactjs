@@ -1,0 +1,55 @@
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+.maincontainer {
+    width: 860px;
+    height: 333px;
+    margin: auto;
+    // margin-top: 5%;
+    // margin-bottom: 5%;
+    // background-color: silver;
+}
+
+.business-card-container {
+    // border: 1px solid red;
+    height: 100%;
+    position: relative;
+    perspective: 1800px;
+}
+
+.business-card {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    transition: transform 1s;
+    transform-style: preserve-3d;
+}
+
+div.business-card div.front, div.back {
+    display: block;
+    height: 100%;
+    width: 100%;
+    line-height: 260px;
+    color: red;
+    text-align: center;
+    font-weight: bold;
+    font-size: 140px;
+    position: absolute;
+    backface-visibility: hidden;
+}
+
+div.front {
+    background: pink;
+  }
+
+.back {
+    background: grey;
+    transform: rotateY(180deg);
+}
+
+.flipped {
+    transform: rotateY(180deg);
+}

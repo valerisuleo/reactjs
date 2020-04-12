@@ -4,11 +4,20 @@ import BarGraph from "../../../common/bar-graph/barGraph";
 
 class BarSkillsCard extends Component {
     renderAside() {
+        const { isGifChanged } = this.props;
+        let source;
+
+        if (!isGifChanged) {
+            source = require(`../../../../images/about/player.gif`);
+        } else {
+            source = require(`../../../../images/about/won.gif`);
+        }
+
         return (
             <div className="player-container">
                 <img
-                    src={require(`../../../../images/about/player.gif`)}
-                    className="card-img player"
+                    src={source}
+                    className={!isGifChanged ? "card-img" : "card-img won"}
                 />
             </div>
         );

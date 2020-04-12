@@ -6,6 +6,7 @@ class ProjectsCard extends Component {
 
     renderAside() {
         const { cardTitle, cardText } = this.props;
+        
         return (
             <div className="card-body pr-5">
                 <h1 className="card-title">{cardTitle}</h1>
@@ -20,8 +21,7 @@ class ProjectsCard extends Component {
 
     renderSection() {
         const { imgName, directory } = this.props;
-        console.log('imgName', imgName);
-        
+
         return (
             <img
                 src={require(`../../../images/${directory}/${imgName}.jpg`)}
