@@ -13,7 +13,7 @@ function Footer() {
                         <hr/>
                         <footer>
                             <p className="text-center">
-                                Made with <span>&hearts;</span>
+                                Made with <span>&hearts;</span> and React.JS
                             </p>
                         </footer>
                     </div>
