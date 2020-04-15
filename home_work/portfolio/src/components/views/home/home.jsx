@@ -29,30 +29,47 @@ class Home extends Component {
             },
         ],
         isTransitionEnd: false,
+        isMobile: false,
         audioFx: null,
+    };
+
+    componentDidMount() {
+        window.addEventListener("scroll", this.getInnerWidth);
+        this.getInnerWidth();
+    }
+
+    componentWillUnmount() {
+        window.removeEventListener("scroll", this.getInnerWidth);
+    }
+
+    getInnerWidth = () => {
+        const { innerWidth } = window;
+        if (innerWidth <= 770) {
+            this.setState({ isMobile: true});
+        }
     };
 
     handleClick = (e) => {
         const current = e;
-        const { audioFx } = this.state;
+        const { audioFx,isMobile } = this.state;
 
-        if (!current.isOpen) {
+        if (!current.isOpen && !isMobile) {
             this.playFx(soundClick);
         }
         current.isActive = false;
         this.addClassOpen();
         this.waitForTransitionEnd();
 
-        if (current.isOpen) {
+        if (current.isOpen && !isMobile) {
             audioFx.pause();
         }
     };
 
     handleMouseOver = (e) => {
         const current = e;
-        const { isTransitionEnd } = this.state;
+        const { isTransitionEnd, isMobile } = this.state;
 
-        if (!current.isOpen) {
+        if (!current.isOpen && !isMobile) {
             this.playFx(soundHeartBeat);
         }
 
@@ -62,11 +79,11 @@ class Home extends Component {
         let index = circles.indexOf(current);
         circles[index] = current;
 
-        if (current.isOpen && current.isActive) {
+        if (current.isOpen && current.isActive && !isMobile) {
             this.playFx(soundCursor);
         }
 
-        if (isTransitionEnd) {
+        if (isTransitionEnd && !isMobile) {
             this.playFx(soundHeartBeat);
         }
         this.setState({ circles });
@@ -75,23 +92,27 @@ class Home extends Component {
     handleMouseOut = (e) => {
         const current = e;
         current.isActive = false;
-        const { audioFx } = this.state;
+        const { audioFx, isMobile } = this.state;
         const circles = [...this.state.circles];
 
         let index = circles.indexOf(current);
         circles[index] = current;
 
-        audioFx.pause();
+        if (!isMobile) {
+            audioFx.pause();
+        }
 
         this.setState({ circles });
     };
 
     waitForTransitionEnd() {
-        const { audioFx } = this.state;
+        const { audioFx, isMobile } = this.state;
         const circleBlack = document.getElementsByClassName("circle")[1];
         circleBlack.addEventListener("webkitTransitionEnd", () => {
             this.setState({ isTransitionEnd: true });
-            audioFx.pause();
+            if (!isMobile) {
+                audioFx.pause();
+            }
         });
     }
 
@@ -101,7 +122,7 @@ class Home extends Component {
             this.setState({ audioFx: audio });
             audio.play();
         }
-    };
+    }
 
     addClassOpen() {
         const circles = [...this.state.circles];
@@ -126,7 +147,7 @@ class Home extends Component {
 
     render() {
         const { circles, isTransitionEnd } = this.state;
-
+        
         return (
             <React.Fragment>
                 {circles.map((item, i) => (

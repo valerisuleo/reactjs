@@ -1,3 +1,9 @@
+#footy {
+    @media only screen and (max-width: 640px) {
+        display: none !important;
+    }
+}
+
 footer {
     p {
         span {

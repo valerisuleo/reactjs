@@ -19,7 +19,7 @@ class Contact extends Component {
 
         return (
             <Fragment>
-                <div className="maincontainer">
+                <div className="contact-container">
                     <div
                         onMouseLeave={this.handleMouseOut}
                         className="business-card-container"

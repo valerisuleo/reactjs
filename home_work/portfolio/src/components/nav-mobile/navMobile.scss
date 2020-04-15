@@ -1,0 +1,67 @@
+
+
+.asso {
+    height: 100px;
+    width: 100px;
+    border-radius: 100px;
+    background-color: red;
+}
+
+.nav-header {
+    background: #157EBF;
+    position: fixed;
+    width: 100%;
+    z-index: 5;
+    height: 300px;
+    overflow: hidden;
+    /* Float Clear */
+    transition: .4s;
+    /* CSS3 Transition */
+    margin-top: -18.5em;
+    // margin-top: -15.875em;
+    /* Height in Chrome */
+
+    a {
+        text-decoration: none;
+        font-weight: bold;
+        text-decoration: none;
+    }
+    
+    li {
+        list-style: none;
+    }
+
+    nav {
+        text-align: center;
+        background: #1E1E1E;
+    }
+    
+    nav ul li {
+        border-bottom: 1px dashed #333;
+        /* PX for Opera */
+    }
+    
+    nav ul li:last-child {
+        border: none;
+    }
+    
+    nav ul a {
+        display: block;
+        padding: .75em 0;
+        transition: .1s;
+        /* Hover-off Transition */
+    }
+    
+    nav ul a:active {
+        background: black;
+        transition: .1s;
+        /* Hover-on Transition */
+    }
+}
+
+/* Class we toggle */
+.show {
+    margin-top: -3em !important;
+    height: 200px !important;
+    /* to overide inline style */
+}

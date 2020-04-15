@@ -32,7 +32,7 @@ class About extends Component {
     refOffSet = React.createRef();
 
     handleScroll = () => {
-        const lastScrollY = window.scrollY;
+        const lastScrollY = window.scrollY;        
         const { offsetTop } = this.refOffSet.current;
         const isVisible = { isVisible: true };
         const waitForit = { waitForit: true };

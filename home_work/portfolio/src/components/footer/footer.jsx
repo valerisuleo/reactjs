@@ -8,7 +8,7 @@ function Footer() {
     return (
         <Fragment>
             {pathname !== "/" ? (
-                <div className="row mb-5 d-flex justify-content-center">
+                <div className="row mb-5 d-flex justify-content-center" id='footy'>
                     <div className="col-10">
                         <hr/>
                         <footer>

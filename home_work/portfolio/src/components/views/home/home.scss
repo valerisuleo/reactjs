@@ -14,6 +14,13 @@
     -webkit-transition: all .5s linear;
     cursor: pointer;
 
+    @media only screen and (max-width: 640px) {
+        height: 50px;
+        width: 50px;
+        top: calc(55vh - 50px);
+        left: calc(57vw - 50px);
+    }
+
     &.black {
         background-color: black;
         z-index: 6;
@@ -30,6 +37,10 @@
         &.open {
             background-color: black;
             left: 25vw;
+
+            @media only screen and (max-width: 640px) {
+                left: 15vw;
+            }
         }
     }
 
@@ -39,6 +50,10 @@
 
         &.open {
             left: calc(75vw - 100px);
+
+            @media only screen and (max-width: 640px) {
+                left: calc(75vw - 15px);
+            }
         }
     }
 

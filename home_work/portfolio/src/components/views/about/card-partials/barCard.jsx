@@ -17,7 +17,7 @@ class BarSkillsCard extends Component {
             <div className="player-container">
                 <img
                     src={source}
-                    className={!isGifChanged ? "card-img" : "card-img won"}
+                    className={!isGifChanged ? "card-img d-none d-lg-block" : "card-img d-none d-lg-block won"}
                 />
             </div>
         );

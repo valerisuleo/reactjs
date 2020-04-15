@@ -4,12 +4,17 @@
     box-sizing: border-box;
 }
 
-.maincontainer {
+.contact-container {
     width: 760px;
     height: 360px;
     margin: auto;
     margin-top: 5%;
     margin-bottom: 5%;
+
+    @media only screen and (max-width: 640px) {
+        width: 100%;
+        height: 100vh;
+    }
 }
 
 .business-card-container {
@@ -37,6 +42,10 @@ div.back {
     font-weight: bold;
     position: absolute;
     backface-visibility: hidden;
+
+    @media only screen and (max-width: 640px) {
+        line-height: 100vh;
+    }
 }
 
 div.front {
@@ -57,10 +66,21 @@ div.front {
     transform: rotateY(180deg);
     box-shadow: 0 15px 15px -8px #444;
 
+    @media only screen and (max-width: 640px) {
+        height: 100vh;
+        box-shadow: none;
+    }
+
     section {
         height: 100%;
         width: 60%;
         float: left;
+
+        @media only screen and (max-width: 640px) {
+            float: none;
+            height: 50%;
+            width: 100%;
+        }
 
         div {
             height: 33.33%;
@@ -103,6 +123,13 @@ div.front {
         float: right;
         padding: 9.5% 0 1% 0;
 
+        @media only screen and (max-width: 640px) {
+            float: none;
+            height: 50%;
+            width: 100%;
+            padding: 0;
+        }
+
         p {
             line-height: 1.3em;
             text-align: left;
@@ -111,6 +138,11 @@ div.front {
             font-family: 'Lato', sans-serif;
             color: rgba(0, 0, 0, .7);
             margin-bottom: 3em;
+
+            @media only screen and (max-width: 640px) {
+                text-align: center;
+
+            }
 
             &:first-of-type,
             &:nth-of-type(3),

@@ -6,11 +6,13 @@ import CloseWindow from './components/close-window/closeWindow';
 import About from './components/views/about/about';
 import Contact from './components/views/contact/contact';
 import Footer from './components/footer/footer';
+import NavMobile from './components/nav-mobile/navMobile';
 
 class Router extends Component {
     render() {
         return (
             <Fragment>
+                <NavMobile></NavMobile>
                 <CloseWindow></CloseWindow>
                 <Switch>
                     <Route path="/contact" component={Contact}></Route>

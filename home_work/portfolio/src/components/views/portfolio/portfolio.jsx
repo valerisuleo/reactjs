@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import * as http from "../../../services/porfolioService";
-import "./portfolio.scss";
 import ProjectsCard from './projectsCard'
 
 class Portfolio extends Component {
@@ -17,7 +16,8 @@ class Portfolio extends Component {
         const { projects } = this.state;
 
         return (
-            <div className="row wrapper">
+            <div className='container mt-5'>
+                <div className="row">
                 <div className="col">
                     {projects.map((item, i) => (
                         <ProjectsCard
@@ -29,6 +29,7 @@ class Portfolio extends Component {
                         ></ProjectsCard>
                     ))}
                 </div>
+            </div>
             </div>
         );
     }
