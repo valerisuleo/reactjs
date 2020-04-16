@@ -1,6 +1,6 @@
 import React, { Fragment } from "react";
-import "./footer.scss";
 import { useLocation } from "react-router-dom";
+import "./footer.scss";
 
 function Footer() {
     const { pathname } = useLocation();
@@ -8,12 +8,16 @@ function Footer() {
     return (
         <Fragment>
             {pathname !== "/" ? (
-                <div className="row mb-5 d-flex justify-content-center" id='footy'>
+                <div
+                    className="row mb-5 d-flex justify-content-center"
+                    id="footy"
+                >
                     <div className="col-10">
-                        <hr/>
+                        <hr />
                         <footer>
                             <p className="text-center">
-                                Made with <span>&hearts;</span> and React.JS
+                                Made with <span>&hearts;</span>
+                                <strong>&</strong>React
                             </p>
                         </footer>
                     </div>

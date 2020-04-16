@@ -4,12 +4,38 @@
     box-sizing: border-box;
 }
 
+// overwrite bootstrap class: we need !important :(
+@mixin zero() {
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+#contact {
+    margin-top: 3rem !important;
+    margin-bottom: 3rem !important;
+    
+    @media only screen and (max-width: 640px) {
+        margin-bottom: 0 !important;
+        &.zero {
+            @include zero()
+        }
+    }
+
+    .row {
+        .col {
+            @media only screen and (max-width: 640px) {
+                &.zero {
+                    @include zero()
+                }
+            }
+        }
+    }
+}
+
 .contact-container {
     width: 760px;
     height: 360px;
     margin: auto;
-    margin-top: 5%;
-    margin-bottom: 5%;
 
     @media only screen and (max-width: 640px) {
         width: 100%;
@@ -69,6 +95,7 @@ div.front {
     @media only screen and (max-width: 640px) {
         height: 100vh;
         box-shadow: none;
+        padding: 5%;
     }
 
     section {

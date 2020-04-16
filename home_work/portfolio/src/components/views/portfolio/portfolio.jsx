@@ -8,6 +8,7 @@ class Portfolio extends Component {
     };
 
     componentDidMount() {
+        window.scrollTo(0, 0);
         const response = http.getProjects();
         this.setState({ projects: response });
     }

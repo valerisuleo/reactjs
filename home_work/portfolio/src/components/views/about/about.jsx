@@ -19,6 +19,7 @@ class About extends Component {
     };
 
     componentDidMount() {
+        window.scrollTo(0, 0);
         window.addEventListener("scroll", this.handleScroll);
         const response = http.getExpericencesAndEducation();
         const { experience, education } = response;

@@ -1,5 +1,5 @@
-import React, { Fragment } from "react";
-import { useLocation } from "react-router-dom";
+import React, { Fragment, useContext } from "react";
+import { useLocation, Link } from "react-router-dom";
 import useWindowScroll from "@react-hook/window-scroll";
 import "./navMobile.scss";
 
@@ -18,7 +18,7 @@ const NavMobile = () => {
         return onScroll;
     };
 
-    const handleClick = () => {
+    const handleClick = (e) => {
         isOpen = !isOpen;
         const { current } = header;
         isOpen
@@ -37,16 +37,20 @@ const NavMobile = () => {
                     <nav>
                         <ul>
                             <li>
-                                <a href="#">Home</a>
+                                <Link to="/">Home</Link>
                             </li>
                             <li>
-                                <a href="#">About</a>
+                                <Link to="/about">About</Link>
                             </li>
                             <li>
-                                <a href="#">Contact</a>
+                                <Link to="/portfolio">Portfolio</Link>
+                            </li>
+                            <li>
+                                <Link to="/contact">Contact</Link>
                             </li>
                         </ul>
                     </nav>
+                    <div className='finger-print'></div>
                 </header>
             ) : null}
         </Fragment>
