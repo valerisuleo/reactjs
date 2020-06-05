@@ -9,7 +9,7 @@ class Portfolio extends Component {
 
     componentDidMount() {
         window.scrollTo(0, 0);
-        const response = http.getProjects();
+        const response = http.getProjects();        
         this.setState({ projects: response });
     }
 
@@ -26,6 +26,7 @@ class Portfolio extends Component {
                             cardTitle={item.title}
                             cardText={item.body}
                             imgName={item.path}
+                            github={item.github}
                             directory="projects"
                         ></ProjectsCard>
                     ))}

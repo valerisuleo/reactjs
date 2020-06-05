@@ -1,4 +1,7 @@
 #footy {
+    @media only screen and (max-width: 960px) {
+        display: none !important;
+    }
     @media only screen and (max-width: 640px) {
         display: none !important;
     }

@@ -9,13 +9,16 @@
     "@testing-library/user-event": "^7.2.1",
     "animate.css": "^3.7.2",
     "bootstrap": "^4.4.1",
+    "express-favicon": "^2.0.1",
     "highcharts": "^8.0.4",
     "highcharts-react-official": "^3.0.0",
     "node-sass": "^4.13.1",
+    "path": "^0.12.7",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "react-router-dom": "^5.1.2",
-    "react-scripts": "3.4.1"
+    "react-scripts": "3.4.1",
+    "webpack-dev-server": "^3.10.3"
   },
   "scripts": {
     "start": "react-scripts start",

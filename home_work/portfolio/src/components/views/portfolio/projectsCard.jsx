@@ -5,7 +5,7 @@ import BtnCustom from "../../common/btn-custom/btnCustom";
 class ProjectsCard extends Component {
 
     renderAside() {
-        const { cardTitle, cardText } = this.props;
+        const { cardTitle, cardText, github } = this.props;        
         
         return (
             <div className="card-body pr-5">
@@ -13,7 +13,7 @@ class ProjectsCard extends Component {
                 <hr />
                 <p className="card-text mt-5">{cardText}</p>
                 <div className="card-text">
-                    <BtnCustom />
+                    <BtnCustom github={github} />
                 </div>
             </div>
         );

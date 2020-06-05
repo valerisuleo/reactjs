@@ -1,4 +1,4 @@
-import React, { Fragment, useContext } from "react";
+import React, { Fragment } from "react";
 import { useLocation, Link } from "react-router-dom";
 import useWindowScroll from "@react-hook/window-scroll";
 import "./navMobile.scss";

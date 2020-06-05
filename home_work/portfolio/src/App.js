@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
 import './App.scss';
-import Router from './router';
+import RouterModule from './router';
 
 class App extends Component {
     render() {
         return (
-            <Router></Router>
+            <RouterModule></RouterModule>
         );
     }
 }

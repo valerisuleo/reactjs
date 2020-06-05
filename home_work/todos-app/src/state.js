@@ -1,5 +1,5 @@
 const state = {
-    data: {}
+    formModel: {}
 }
 
 export default Object.assign(state);

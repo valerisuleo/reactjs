@@ -8,7 +8,7 @@ import Contact from './components/views/contact/contact';
 import Footer from './components/footer/footer';
 import NavMobile from './components/nav-mobile/navMobile';
 
-class Router extends Component {
+class RouterModule extends Component {
     render() {
         return (
             <Fragment>
@@ -26,4 +26,4 @@ class Router extends Component {
     }
 }
 
-export default Router;
+export default RouterModule;

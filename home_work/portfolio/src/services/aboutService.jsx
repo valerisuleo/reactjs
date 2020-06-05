@@ -41,6 +41,14 @@ const about = {
         {
             nameInstitute: "Udemy",
             educationLevel: "Licenses & Certifications",
+            field: "Angular Firebase & Firestore Masterclass",
+            when: "May 2020",
+            where: "",
+            
+        },
+        {
+            nameInstitute: "Udemy",
+            educationLevel: "Licenses & Certifications",
             field: "Testing Angular 4 (previously Angular 2) Apps with Jasmine",
             when: "Feb 2020",
             where: "",
