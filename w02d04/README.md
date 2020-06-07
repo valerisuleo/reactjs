@@ -323,10 +323,11 @@ Basically the idea behind *Joi* is to define a `schema` which is a simple obj: i
 import Joi from 'joi-browser'
 
 class LoginForm extends Component {
-    schema = {
-        username: Joi.stringify().required(),
-        password: Joi.stringify().required()
-    }
+ schema = {
+        flavor: Joi.string()
+            .required(),
+        size: Joi.string()
+    };
 ```
 
 - Now we need to update our validate method on submit using `Joi.validate()`, it will take 2 args: the first one is the obj that we wanto to validate and the second one is the `schema`.
