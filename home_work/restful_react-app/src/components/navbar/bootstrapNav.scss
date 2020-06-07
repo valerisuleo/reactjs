@@ -1,0 +1,15 @@
+.navbar {
+    font-family: 'Bungee', cursive;
+    color: white;
+    justify-content: inherit !important;
+
+    .nav-link {
+        color: silver;
+        &:nth-of-type(1) {
+            color: yellow;
+            font-size: 20px;
+            margin-right: 25em;
+        }
+    }
+}
+
