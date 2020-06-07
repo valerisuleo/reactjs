@@ -25,12 +25,4 @@ Here is a screenshot of what your final code might look like:
 
 ![validations](https://cloud.githubusercontent.com/assets/40461/9593800/1ad6d962-504b-11e5-9338-f03a6ab4cacf.jpg)
 
-#### Tips
 
-- Attach your form to your `MainCtrl` using the `name` attribute on the form.
-- Add `novalidate` to your `<form>` tag to stop the built in HTML5 validation popups.
-
-## Additional Resources
-
-- [`ngMessages` Docs](https://docs.angularjs.org/api/ngMessages)
-- [Angular Validations Cheatsheet](http://www.ng-newsletter.com/posts/form-validation-with-angularjs.html)
