@@ -1,0 +1,10 @@
+@import url(https://fonts.googleapis.com/css?family=Sniglet:800);
+
+h1 {
+    font-family: 'Sniglet', Helvetica, cursive;
+    letter-spacing: -2px;
+    font-size: 4.2rem !important;
+    text-align: center;
+    margin: 2rem auto;
+    line-height: 1.2;
+}
