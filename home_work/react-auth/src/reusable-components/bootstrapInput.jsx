@@ -1,8 +1,8 @@
 import React from "react";
 
 const BootstrapInput = (props) => {
-    const { name, label, type, value, onChange} = props;
-    
+    const { name, label, type, value, onChange } = props;    
+
     return (
         <div className="form-group">
             <label htmlFor={name}>{label}</label>
@@ -12,7 +12,6 @@ const BootstrapInput = (props) => {
                 type={type}
                 onChange={onChange}
                 className="form-control"
-                aria-describedby="emailHelp"
             />
         </div>
     );

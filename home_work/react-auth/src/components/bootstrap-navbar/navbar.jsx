@@ -10,6 +10,8 @@ class BootstrapNavbar extends Component {
 
     isLoggedIn = () => {
         const response = authService.getCurrentUser();
+        console.log(response);
+        
         return response;
     };
 
@@ -31,13 +33,18 @@ class BootstrapNavbar extends Component {
                 ) : null}
 
                 {this.isLoggedIn() ? (
-                    <a
+                   <Fragment>
+                       <Link  to="#" className="nav-link disabled" >
+                            Add Student
+                        </Link>
+                        <a
                         className="nav-link"
                         style={{ color: "white" }}
                         onClick={this.signOut}
                     >
                         Logout
                     </a>
+                   </Fragment>
                 ) : null}
             </nav>
         );

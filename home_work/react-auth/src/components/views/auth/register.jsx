@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React from "react";
 import BootstrapForm from "../../../reusable-components/bootstrapForm";
 import http from "../../../services/httpService";
 import config from "../../../config.json";
@@ -42,8 +42,6 @@ class Register extends BootstrapForm {
             },
         });
     }
-
-   
 
     render() {
         return (
