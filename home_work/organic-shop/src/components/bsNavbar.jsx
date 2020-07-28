@@ -12,6 +12,10 @@ class BootstrapNavbar extends Component {
         }));
     };
 
+    handleCloseMenu = () => {
+        this.setState({ isOpen: false });
+    };
+
     render() {
         const { isOpen } = this.state;
         return (
@@ -45,7 +49,6 @@ class BootstrapNavbar extends Component {
                             <li className="nav-item dropdown">
                                 <a
                                     className="nav-link dropdown-toggle"
-                                    href="#"
                                     id="navbarDropdown"
                                     role="button"
                                     data-toggle="dropdown"
@@ -63,19 +66,29 @@ class BootstrapNavbar extends Component {
                                     }
                                     aria-labelledby="navbarDropdown"
                                 >
-                                    <Link to='/my/orders' className="dropdown-item">
+                                    <Link
+                                        onClick={this.handleCloseMenu}
+                                        to="/my/orders"
+                                        className="dropdown-item"
+                                    >
                                         My Orders
                                     </Link>
-                                    <Link to='/admin/orders' className="dropdown-item">
+                                    <Link
+                                        onClick={this.handleCloseMenu}
+                                        to="/admin/orders"
+                                        className="dropdown-item"
+                                    >
                                         Manage Orders
                                     </Link>
-                                    <Link to='/admin/products' className="dropdown-item">
+                                    <Link
+                                        onClick={this.handleCloseMenu}
+                                        to="/admin/products"
+                                        className="dropdown-item"
+                                    >
                                         Manage Products
                                     </Link>
                                     <div className="dropdown-divider"></div>
-                                    <a className="dropdown-item">
-                                        Log Out
-                                    </a>
+                                    <a className="dropdown-item">Log Out</a>
                                 </div>
                             </li>
                         </ul>
