@@ -5,7 +5,7 @@
 
 Your task is to build a RESTful React app, that consumes an Express API. The API has been built for you, and there is a seeds file that is already filled out.
 
-### Requirements
+### Tasks
 
 You should use `npm i react-router-dom --save` and `npm i axios --save` to complete the following tasks:
 
