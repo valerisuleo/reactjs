@@ -1,0 +1,9 @@
+{
+    "it": {
+        "title": "Titolo",
+    "description": {
+        "part1": "questa è un testo italiano",
+        "part2": "croccodio!"
+    }
+    }
+}

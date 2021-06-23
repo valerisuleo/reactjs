@@ -57,7 +57,7 @@ class App extends Component {
         // error handling
         try {
             // await http.put(config.postAPI + `/${post.id}`);
-            await http.put('https://jsonplaceholder.typicode.com/posts/coddio' + `/${post.id}`);
+            await http.delete('https://jsonplaceholder.typicode.com/posts/coddio' + `/${post.id}`);
         } catch (error) {
             const { status } = error.response;
 
@@ -73,6 +73,7 @@ class App extends Component {
         return (
             <React.Fragment>
                 <ToastContainer></ToastContainer>
+
                 <button className="btn btn-primary" onClick={this.handleAdd}>
                     Add
                 </button>

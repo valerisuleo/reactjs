@@ -348,6 +348,100 @@ Having this `const apiEndPoint = 'https://jsonplaceholder.typicode.com/posts';` 
 
 
  
+## Logging Errors
+
+(go to: `reactjs/home_work/react-http`)
+
+```
+if (!expectedError) {
+        toast.error("oops...UNEXPECTED ERROR")
+    }
+```
+
+If we got an error we `log` it. This is totally fine as long we are developing on our machine, but when we deployed our app to a `production env` this isn't going to be helpful because as we know we can't access to the `console.log` of the final user.
+**We need a way to log this error from remote.**
+
+> That's when we use a login as service provider.
+
+My absolute favorite is [Sentry.io](https://sentry.io)
+
+All we have to do is:
+
+1. `npm install @sentry/browser --save`
+
+2. Import it at the top
+
+	```
+	import * as Sentry from '@sentry/browser';
+	Sentry.init({ dsn: "https://someID@sentry.io/5183105" });
+	```
+
+3. Finally we can log our error: the coolest part is that **we will receive an email notification** every time we got an error!
+
+	```
+	axios.interceptors.response.use(null, error => {
+	    const { status } = error.response;
+	    const expectedError = error.response && status >= 400 && status < 500;
+	
+	    if (!expectedError) {
+	    
+	        Sentry.captureException(error);
+	        
+	        toast.error("oops...UNEXPECTED ERROR");
+	    }
+	    return Promise.reject(error);
+	});
+	``` 
+
+
+### Extracting a Logger Service
+
+Let's create now a logger service, because in the future things might be different and maybe we will want to replace *Sentry* with something else.
+
+1. `touch loggerService.js`
+
+2. let's write a couple of methods
+
+	```
+	import * as Sentry from '@sentry/browser';
+	
+	function init() {
+		Sentry.init({ dsn: "https://someID@sentry.io/5183105" });
+	}
+	
+	function log(error) {
+		Sentry.captureException(error);
+	}
+	
+	export default {
+		init,
+		log
+	}
+	```
+
+3. Finally we can use 
+	
+	```
+	import sentry from './loggerService';
+	
+	sentry.init()
+	
+	axios.interceptors.response.use(null, error => {
+		const { status } = error.response;
+		const expectedError = error.response && status >= 400 && status < 500;
+		if (!expectedError) {
+		
+		    sentry.log(error);
+		    
+		    toast.error("oops...UNEXPECTED ERROR");
+		}
+		return Promise.reject(error);
+	});
+	``` 
+
+
+
+
 
 
 

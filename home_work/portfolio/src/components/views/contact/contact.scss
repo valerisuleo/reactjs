@@ -1,0 +1,233 @@
+// overwrite bootstrap class: we need !important :(
+
+@mixin zero() {
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+
+#contact {
+    margin-top: 3rem !important;
+    margin-bottom: 3rem !important;
+    
+    @media only screen and (max-width: 640px) {
+        margin-bottom: 0 !important;
+        &.zero {
+            @include zero()
+        }
+    }
+
+    .row {
+        .col {
+            @media only screen and (max-width: 640px) {
+                &.zero {
+                    @include zero()
+                }
+            }
+        }
+    }
+}
+
+.contact-container {
+    width: 760px;
+    height: 360px;
+    margin: auto;
+
+    @media only screen and (max-width: 960px) {
+        width: 100%;
+        height: 100vh;
+    }
+    
+    @media only screen and (max-width: 640px) {
+        width: 100%;
+        height: 100vh;
+    }
+}
+
+.business-card-container {
+    height: 100%;
+    position: relative;
+    perspective: 1800px;
+}
+
+.business-card {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    transition: transform 1s;
+    transform-style: preserve-3d;
+}
+
+div.business-card div.front,
+div.back {
+    display: block;
+    height: 100%;
+    width: 100%;
+    color: white;
+    text-align: center;
+    font-weight: bold;
+    position: absolute;
+    backface-visibility: hidden;
+
+    @media only screen and (max-width: 640px) {
+        line-height: 100vh;
+    }
+}
+
+div.front {
+    background: #e6e6e6;
+    line-height: 450px;
+
+
+    @media only screen and (max-width: 960px) {
+        line-height: 60em;
+    }
+
+    span {
+        display: inline-block;
+        height: 80px;
+        width: 80px;
+        border-radius: 80px;
+        background-color: white;
+    }
+}
+
+.back {
+    -webkit-transform: rotateY(180deg);
+    -ms-transform: rotateY(180deg);
+    transform: rotateY(180deg);
+    box-shadow: 0 15px 15px -8px #444;
+
+    @media only screen and (max-width: 960px) {
+        height: 90vh !important;
+    }
+    
+    @media only screen and (max-width: 640px) {
+        height: 100vh;
+        box-shadow: none;
+        padding: 5%;
+    }
+
+    section {
+        height: 100%;
+        width: 60%;
+        float: left;
+
+        @media only screen and (max-width: 960px) {
+            float: none;
+            height: 50%;
+            width: 100%;
+        }
+        
+        @media only screen and (max-width: 640px) {
+            float: none;
+            height: 50%;
+            width: 100%;
+        }
+
+        div {
+            height: 33.33%;
+
+            &:nth-of-type(2) {
+                ul {
+                    height: 100%;
+                    line-height: 170px;
+                    list-style: none;
+
+                    @media only screen and (max-width: 960px) {
+                        line-height: 250px;
+                    }
+
+                    li {
+                        display: inline-block;
+                        margin-right: 12%;
+                        height: 50px;
+                        width: 50px;
+                        border-radius: 50px;
+
+                        &:first-of-type {
+                            background-color: black;
+                        }
+
+                        &:nth-of-type(2) {
+                            background-color: grey;
+                        }
+
+                        &:last-of-type {
+                            margin-right: 0;
+                            background-color: silver;
+                        }
+                    }
+                }
+            }
+        }
+
+    }
+
+    aside {
+        height: 100%;
+        width: 40%;
+        float: right;
+        padding: 9.5% 0 1% 0;
+
+        @media only screen and (max-width: 960px) {
+            float: none;
+            height: 50%;
+            width: 100%;
+        }
+
+        @media only screen and (max-width: 640px) {
+            float: none;
+            height: 50%;
+            width: 100%;
+            padding: 0;
+        }
+
+        p {
+            line-height: 1.3em;
+            text-align: left;
+            font-weight: normal;
+            font-size: 14px;
+            font-family: 'Lato', sans-serif;
+            color: rgba(0, 0, 0, .7);
+            margin-bottom: 3em;
+
+            @media only screen and (max-width: 960px) {
+                text-align: center;
+                font-size: 16px;
+            }
+            @media only screen and (max-width: 640px) {
+                text-align: center;
+            }
+
+            &:first-of-type,
+            &:nth-of-type(3),
+            &:nth-of-type(4),
+            &:nth-of-type(6),
+            &:nth-of-type(7),
+            &:last-of-type {
+                margin-bottom: 0;
+            }
+
+            &:first-of-type {
+                font-weight: bold;
+            }
+
+            &:nth-of-type(2) {
+                font-style: italic;
+            }
+
+            a {
+                color: rgba(0, 0, 0, .7);
+
+                &:hover {
+                    color: #00A0C6;
+                }
+            }
+        }
+    }
+}
+
+.flipped {
+    transform: rotateY(180deg);
+}

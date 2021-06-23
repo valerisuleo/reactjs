@@ -32,6 +32,9 @@ Unlike framework like Angular, in React we don't have the concept of routing bec
 3. Register our route: we need to tell react what component should be render given a specific url.
 
 	```
+	
+	import { Route, Switch, Redirect } from "react-router-dom";
+
 	class App extends Component {
 	    render() {
 	        return (

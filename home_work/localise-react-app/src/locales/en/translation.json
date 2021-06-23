@@ -1,0 +1,9 @@
+{
+    "en": {
+        "title": "Title",
+    "description": {
+        "part1": "this is an english string",
+        "part2": "for fuck sake!"
+    }
+    }
+}

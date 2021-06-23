@@ -1,0 +1,47 @@
+.burger-menu {
+    background: transparent;
+    margin: auto;
+    margin-top: 30px;
+    margin-bottom: 5%;
+    position: relative;
+    height: 30px;
+    width: 50px;
+    cursor: pointer;
+  
+    &:before,
+    &:after {
+      background: grey;
+      backface-visibility: hidden;
+      content: "";
+      height: 2px;
+      left: 0;
+      transition: 0.75s;
+      width: 50px;
+    }
+    &:before {
+      box-shadow: grey 0 14px 0 0;
+      position: absolute;
+      top: 0;
+    }
+    &:after {
+      position: absolute;
+      top: calc(100% - 2px);
+    }
+    &:hover {
+      &:before {
+        box-shadow: transparent 0 0 0 0;
+        top: 50%;
+        transform: rotate(225deg);
+      }
+      &:after {
+        top: 50%;
+        transform: rotate(315deg);
+      }
+    }
+    @media only screen and (max-width: 640px) {
+      display: none;
+    }
+    @media only screen and (max-width: 960px){
+      display: none;
+    }
+  }
