@@ -89,6 +89,31 @@ class App extends Component {
 }
 ```
 
+> ### UPDATE!!!
+> In react-router-dom v6, "Switch" is replaced by routes "Routes". You need to update the import from
+
+```
+import { Switch, Route } from "react-router-dom";
+```
+
+to:
+
+```
+import { Routes ,Route } from 'react-router-dom';
+```
+
+You also need to update the Route declaration from
+
+```
+<Route path="/" component={Home} />
+```
+
+to
+
+```
+<Route path='/welcome' element={<Home/>} />
+```
+
 ## Link
 
 There's a problem: when we click on a link currently it will reload every time the `bundle.js` file which is basically all our javascript code. This is a *SPA* so we want to update only what is stricly necessary.

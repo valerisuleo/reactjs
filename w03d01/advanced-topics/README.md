@@ -608,6 +608,7 @@ Back to `App.js` in
 > Forget about the `context` for a second. How can we update the state of the componente higher and the component tree?
 
 Because we have a `state` we should also provide methods for updating the state:
+
 ```
     // add method take username as arg. let's say is what the user typed in the form
     handleLogin = (credentials) => {
