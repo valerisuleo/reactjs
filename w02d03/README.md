@@ -37,82 +37,26 @@ Unlike framework like Angular, in React we don't have the concept of routing bec
 
 	class App extends Component {
 	    render() {
-	        return (
-	        <div>
-	            <NavBar />
-	            <div className="content">
-	                <Route path="/products" component={ Products }></Route>
-	                <Route path="/posts" component={ Posts }></Route>
-	                <Route path="/admin" component={ Dashboard }></Route>
-	                <Route path="/" component={ Home }></Route>
-	            </div>
-	        </div>
-	        );
+	 return (
+        <Fragment>
+            <BootstrapNav></BootstrapNav>
+            <main className="container">
+                <Routes>
+                    <Route
+                        path="/movies"
+                        element={<MoviesIndex />}
+                    />
+                    <Route path="/counters" element={<Counters />} />
+                    <Route path="/" element={<Navigate to="/movies" />} />
+                </Routes>
+            </main>
+        </Fragment>
+    );
 	    }
 	}
 	```
 	
-## Switch
 
-![Imgur](https://www.dropbox.com/s/hakjzr28v64c3dh/switch.png?raw=1)
-
-So currently when we click on a link i.e. *product* we can see rendering both product an home
-
-> Why?
-
-This is happening because they both share `/` so home will be always rendered.
-
-> How can we fix it?
-
-We can use:
-
-- *Exact*: `<Route path="/" exact component={ Home }></Route>`
-- *Switch*:
-
-```
-class App extends Component {
-    render() {
-        return (
-        <div>
-            <NavBar />
-            <div className="content">
-                <Switch>
-                    <Route path="/products" component={ Products }></Route>
-                    <Route path="/posts" component={ Posts }></Route>
-                    <Route path="/admin" component={ Dashboard }></Route>
-                    <Route path="/" component={ Home }></Route>
-                </Switch>
-            </div>
-        </div>
-        );
-    }
-}
-```
-
-> ### UPDATE!!!
-> In react-router-dom v6, "Switch" is replaced by routes "Routes". You need to update the import from
-
-```
-import { Switch, Route } from "react-router-dom";
-```
-
-to:
-
-```
-import { Routes ,Route } from 'react-router-dom';
-```
-
-You also need to update the Route declaration from
-
-```
-<Route path="/" component={Home} />
-```
-
-to
-
-```
-<Route path='/welcome' element={<Home/>} />
-```
 
 ## Link
 
@@ -151,22 +95,14 @@ export default NavBar;
 
 ```
 import React from "react";
-import { Link } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 
 const NavBar = () => {
   return (
     <ul>
+    
       <li>
-        <Link to="/">Home</Link>
-      </li>
-      <li>
-        <Link to="/products">Products</Link>
-      </li>
-      <li>
-        <Link to="/posts/2018/06">Posts</Link>
-      </li>
-      <li>
-        <Link to="/admin">Admin</Link>
+        <NavLink to={"/products"}>Products</Link>
       </li>
     </ul>
   );
@@ -191,13 +127,16 @@ If we inspect the liks we can see that **we can get for free** the following `pr
 
 > How can we set additional props when we are using Route?
 
-<s>`<Route path="/products" component={ Products }></Route>`</s>
+<s>`<Route path="/movies" element={<MoviesIndex  />} />`</s>
 
 ```
-<Route path="/products" render={(props) => <Products text="Hello, " {...props} />} ></Route>
+ <Route
+	path="/movies"
+	element={<MoviesIndex text={"jello"} />}
+	/>
 ```
 
-Now if we go to `/products` and `console.log(this.props);` we should see the our 3 regular props + `text="Hello`;
+Now if we go to `/movies` and `console.log(this.props);` we should see the our 3 regular props + `text="Hello`;
 
 
 ## State Params
